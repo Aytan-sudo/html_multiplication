@@ -5,3 +5,7 @@
 #question {
     visibility: hidden;
   }
+
+#answer {
+    visibility: hidden;
+  }
