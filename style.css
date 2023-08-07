@@ -1,3 +1,7 @@
 #diamonds{
     color:coral
 }
+
+#question {
+    visibility: hidden;
+  }
