@@ -1,4 +1,4 @@
-// initialize the parameters
+// initialize the parameters for Emily and Louane
 let number_diamonds = 0;
 let num_A = 0;
 let num_B = 0;
