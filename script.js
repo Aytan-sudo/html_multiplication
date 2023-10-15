@@ -2,6 +2,7 @@
 let number_diamonds = 0;
 let num_A = 0;
 let num_B = 0;
+const nombresPossibles = [2, 3, 4, 5, 10];
 
 // declare the audio
 const audio_theme = new Audio("img/theme.mp3");
@@ -22,7 +23,8 @@ function confettis_victory(){
 
 function randomize_numbers() {
     num_A = Math.floor(Math.random() * 10);
-    num_B = Math.floor(Math.random() * 10);
+    calcNum_B = Math.floor(Math.random() * nombresPossibles.length);
+    num_B = nombresPossibles[calcNum_B];
     document.getElementById('NumA').innerHTML = num_A;
     document.getElementById('NumB').innerHTML = num_B;
 }
