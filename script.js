@@ -2,6 +2,8 @@
 let number_diamonds = 0;
 let num_A = 0;
 let num_B = 0;
+var timer = 15;
+var interval;
 const nombresPossibles = [2, 3, 4, 5, 10];
 
 // declare the audio
@@ -33,12 +35,33 @@ function randomize_numbers() {
 var start_button = document.getElementById("start");
 start_button.addEventListener('click', function(){
     randomize_numbers();
+    start_timer();
     document.getElementById('start_box').style.visibility = 'hidden';
     document.getElementById('question').style.visibility = 'visible';
     document.getElementById('answer').style.visibility = 'visible';
     document.getElementById('submitting_answer').focus()
     audio_theme.play()
 })
+
+function start_timer() {
+    interval = setInterval(function() {
+        timer --;
+        document.getElementById("timer").innerHTML = timer;
+        if (timer < 0) {
+            timer = 15;
+            number_diamonds = 0;
+            document.getElementById("diamonds").innerHTML = "";
+            document.getElementById("timer").innerHTML = timer;
+        }
+    }, 1000);
+}
+
+function reset_timer() {
+    clearInterval(interval);
+    timer = 15;
+    document.getElementById("timer").innerHTML = timer;
+    start_timer();
+}
 
 // diamonds are the score. 3 rows of 10 diamonds before victory
 function add_diamonds(x) {
@@ -75,6 +98,7 @@ submitting_answer.addEventListener('keydown', function (e) {
         if (num_A * num_B == input) {
             number_diamonds += 1;
             add_diamonds(1);
+            reset_timer();
         } else {
             number_diamonds = 0;
             document.getElementById("diamonds").innerHTML = "";
