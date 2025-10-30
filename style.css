@@ -14,6 +14,21 @@ body {
     margin: 0;
 }
 
+#config-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 2em;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+
+#config-button:hover {
+    transform: rotate(90deg);
+}
+
 #main {
     height: 100vh;
     display: flex;

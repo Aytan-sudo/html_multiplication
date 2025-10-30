@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Configuration - Multiplication</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="config-style.css">
+        <script src="config.js"></script>
+    </head>
+    <body>
+        <div id="config-container">
+            <h1>Configuration du jeu</h1>
+
+            <form id="config-form">
+                <!-- Type d'opération -->
+                <div class="config-section">
+                    <h2>Type d'opération</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="operation" value="multiplication" checked>
+                            Multiplication
+                        </label>
+                        <label>
+                            <input type="radio" name="operation" value="addition">
+                            Addition
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tables / Nombres utilisés -->
+                <div class="config-section">
+                    <h2>Nombres utilisés (second opérande)</h2>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="numbers" value="0">
+                            0
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="1">
+                            1
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="2" checked>
+                            2
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="3" checked>
+                            3
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="4" checked>
+                            4
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="5" checked>
+                            5
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="6">
+                            6
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="7">
+                            7
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="8">
+                            8
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="9">
+                            9
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="10" checked>
+                            10
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Difficulté -->
+                <div class="config-section">
+                    <h2>Difficulté</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="difficulty" value="easy">
+                            Facile (perte des diamants de la rangée actuelle)
+                        </label>
+                        <label>
+                            <input type="radio" name="difficulty" value="hard" checked>
+                            Difficile (remise à zéro complète)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Durée du timer -->
+                <div class="config-section">
+                    <h2>Durée du timer</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="timer" value="15" checked>
+                            15 secondes
+                        </label>
+                        <label>
+                            <input type="radio" name="timer" value="20">
+                            20 secondes
+                        </label>
+                        <label>
+                            <input type="radio" name="timer" value="30">
+                            30 secondes
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Joueurs -->
+                <div class="config-section">
+                    <h2>Joueurs</h2>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="players" value="Emilie" checked>
+                            Emilie
+                        </label>
+                        <label>
+                            <input type="checkbox" name="players" value="Louane" checked>
+                            Louane
+                        </label>
+                        <label>
+                            <input type="checkbox" name="players" value="Arthur">
+                            Arthur
+                        </label>
+                        <label>
+                            <input type="checkbox" name="players" value="Flora">
+                            Flora
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="button-group">
+                    <button type="button" id="reset-button">Réinitialiser</button>
+                    <button type="submit" id="save-button">Sauvegarder et jouer</button>
+                </div>
+            </form>
+        </div>
+
+        <script src="config-script.js"></script>
+    </body>
+</html>
