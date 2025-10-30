@@ -11,7 +11,7 @@ function loadAndDisplayScores() {
                 localStorage.removeItem('highscores');
             }
         } catch (e) {
-            console.log('localStorage non disponible');
+            // localStorage non disponible (mode file://)
         }
     }
 

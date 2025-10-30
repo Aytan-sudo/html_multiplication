@@ -106,8 +106,6 @@ start_button.addEventListener('click', function(){
 
 // Met a jour le texte du bouton de demarrage
 function updateStartButtonText() {
-    console.log('updateStartButtonText - gameConfig:', gameConfig);
-    console.log('playerName:', gameConfig.playerName);
     start_button.innerHTML = `C'est parti, ${gameConfig.playerName} !`;
 }
 
@@ -203,7 +201,7 @@ function saveVictory() {
                 localStorage.removeItem('highscores');
             }
         } catch (e) {
-            console.log('localStorage non disponible pour highscores');
+            // localStorage non disponible (mode file://)
         }
     }
 
@@ -322,7 +320,3 @@ submitting_answer.addEventListener('keydown', function (e) {
         submitting_answer.value = "";
     }
 })
-
-
-
-

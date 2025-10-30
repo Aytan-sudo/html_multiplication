@@ -16,7 +16,6 @@ function setCookie(name, value, days = 365) {
     const expires = new Date();
     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
     document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/';
-    console.log('setCookie - Cookie defini:', name, '=', value);
 }
 
 function getCookie(name) {
@@ -26,12 +25,9 @@ function getCookie(name) {
         let c = ca[i];
         while (c.charAt(0) === ' ') c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0) {
-            const value = decodeURIComponent(c.substring(nameEQ.length, c.length));
-            console.log('getCookie - Cookie trouve:', name, '=', value);
-            return value;
+            return decodeURIComponent(c.substring(nameEQ.length, c.length));
         }
     }
-    console.log('getCookie - Cookie non trouve:', name);
     return null;
 }
 
@@ -42,13 +38,12 @@ function loadConfig() {
     try {
         savedConfig = localStorage.getItem('gameConfig');
         if (savedConfig) {
-            console.log('loadConfig - Config trouvee dans localStorage, migration vers cookies');
             // Migre vers cookies
             setCookie('gameConfig', savedConfig);
             localStorage.removeItem('gameConfig');
         }
     } catch (e) {
-        console.log('loadConfig - localStorage non disponible, utilisation des cookies');
+        // localStorage non disponible (mode file://), on utilise directement les cookies
     }
 
     // Charge depuis les cookies
@@ -56,34 +51,27 @@ function loadConfig() {
         savedConfig = getCookie('gameConfig');
     }
 
-    console.log('loadConfig - savedConfig brut:', savedConfig);
-
     if (savedConfig) {
         try {
             const config = JSON.parse(savedConfig);
-            console.log('loadConfig - config parse:', config);
 
             // Migration: convertit playerNames (array) en playerName (string)
             if (config.playerNames && Array.isArray(config.playerNames)) {
                 config.playerName = config.playerNames[0] || 'Emilie';
                 delete config.playerNames;
-                console.log('Migration playerNames -> playerName:', config.playerName);
             }
 
             // Assure qu'on a bien un playerName
             if (!config.playerName) {
                 config.playerName = 'Emilie';
-                console.log('playerName manquant, mise a Emilie par defaut');
             }
 
-            console.log('loadConfig - config finale:', config);
             return config;
         } catch (e) {
             console.error('Erreur lors du chargement de la configuration:', e);
             return { ...defaultConfig };
         }
     }
-    console.log('Pas de config sauvegardee, utilisation des valeurs par defaut');
     return { ...defaultConfig };
 }
 
@@ -91,12 +79,10 @@ function loadConfig() {
 function saveConfig(config) {
     try {
         const configString = JSON.stringify(config);
-        console.log('saveConfig - Sauvegarde de:', configString);
         setCookie('gameConfig', configString);
 
-        // Verification
+        // Verification que la sauvegarde a reussi
         const verification = getCookie('gameConfig');
-        console.log('saveConfig - Verification apres sauvegarde:', verification);
         return verification !== null;
     } catch (e) {
         console.error('Erreur lors de la sauvegarde de la configuration:', e);

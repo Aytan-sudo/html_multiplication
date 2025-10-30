@@ -68,7 +68,6 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const newConfig = getFormData();
-    console.log('Config recuperee du formulaire:', newConfig);
 
     // Validation
     if (newConfig.selectedNumbers.length === 0) {
@@ -83,16 +82,13 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
 
     // Validation complete
     const validation = validateConfig(newConfig);
-    console.log('Validation:', validation);
     if (!validation.isValid) {
         alert('Erreur de configuration :\n' + validation.errors.join('\n'));
         return;
     }
 
     // Sauvegarde
-    console.log('Sauvegarde de la config:', newConfig);
     if (saveConfig(newConfig)) {
-        console.log('Config sauvegardee, verification:', loadConfig());
         alert('Configuration sauvegardee avec succes !');
         // Redirection vers la page de jeu
         window.location.href = 'index.html';
