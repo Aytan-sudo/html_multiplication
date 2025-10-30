@@ -2,7 +2,7 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition !
 
-**Version 1.6**
+**Version 1.7**
 
 ## Description
 
@@ -21,11 +21,12 @@ Site web interactif pour apprendre et s'entrainer aux tables de multiplication e
 ### Configuration du Jeu
 - Choix du type d'operation (multiplication ou addition)
 - Selection des tables a reviser (2 a 9) - tables 0, 1 et 10 toujours incluses
+- Bouton "Toutes les tables" pour cocher/decocher rapidement toutes les tables
 - Deux modes de difficulte :
   - **Facile** : Perte des diamants de la rangee actuelle seulement
   - **Difficile** : Remise a zero complete
 - Choix de la duree du timer (15, 20 ou 30 secondes)
-- Selection d'un joueur (Emilie, Louane, Arthur ou Flora)
+- Selection d'un joueur (Emilie, Louane, Arthur, Flora, Papa, Maman)
 - Choix de la couleur de fond (Rose, Bleu, Vert, Jaune)
 - Bouton mute/unmute pour controler le son
 - Sauvegarde automatique des preferences dans le navigateur
@@ -38,6 +39,7 @@ Site web interactif pour apprendre et s'entrainer aux tables de multiplication e
 - Top 3 mis en evidence (or, argent, bronze)
 - Conservation des 50 meilleurs scores
 - Details complets : date, joueur(s), temps, mode de jeu, tables utilisees
+- Indicateur ⭐ TOUTES pour les parties avec toutes les tables (0-10)
 
 ## Structure du Projet
 
@@ -103,7 +105,18 @@ Cree avec amour pour mes enfants
 
 ## Historique des Versions
 
-### Version 1.6 (Actuelle)
+### Version 1.7 (Actuelle)
+- **Ajout de 2 nouveaux joueurs** : Papa et Maman (total de 6 joueurs)
+- **Bouton "Toutes les tables"** : Coche/decoche rapidement toutes les tables (2-9)
+- **Indicateur ⭐ TOUTES** dans les high scores pour identifier les parties completes
+- **Amelioration du bouton "C'est parti"** : Couleur bleue (#3A3B78) au lieu de gris
+- **Design responsive des high scores** :
+  - Largeur adaptative (80% sur grands ecrans, 95% sur tablettes)
+  - Colonnes proportionnelles avec fractions (fr) au lieu de pixels fixes
+  - Meilleur affichage sur tous les ecrans
+- **Page config** : Conservation du design original (800px fixes)
+
+### Version 1.6
 - **Experience utilisateur amelioree** : Suppression des popups de confirmation de succes
 - Feedback visuel uniquement (pas de popups intrusifs)
 - Popups conserves uniquement pour les erreurs et confirmations critiques

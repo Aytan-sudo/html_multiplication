@@ -110,15 +110,13 @@ input::-webkit-inner-spin-button {
 /* ============================================ */
 
 #config-container {
-    width: 80%;
-    min-width: 800px;
+    max-width: 800px;
     margin: 40px auto;
     padding: 25px;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 0.55em;
-    text-align: center;
 }
 
 #config-container h1 {
@@ -134,6 +132,7 @@ input::-webkit-inner-spin-button {
     margin-bottom: 12px;
     border-bottom: 2px solid goldenrod;
     padding-bottom: 4px;
+    text-align: center;
 }
 
 .config-section {
@@ -361,11 +360,6 @@ button:active {
 /* ============================================ */
 
 @media (max-width: 1100px) {
-    #config-container {
-        width: 95%;
-        min-width: unset;
-    }
-
     #highscores-container {
         width: 95%;
         min-width: unset;
