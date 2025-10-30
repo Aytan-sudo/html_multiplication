@@ -58,9 +58,14 @@ function loadAndDisplayScores() {
         const difficultyText = score.difficulty === 'easy' ? 'Facile' : 'Difficile';
         const modeStr = `${operationText} - ${difficultyText}`;
 
+        // Verifie si toutes les tables (0-10) sont incluses
+        const allTables = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const hasAllTables = allTables.every(num => score.selectedNumbers.includes(num));
+        const allTablesIndicator = hasAllTables ? ' ⭐ TOUTES' : '';
+
         // Details
         const numbersStr = score.selectedNumbers.join(', ');
-        const detailsStr = `Tables: ${numbersStr} | Timer: ${score.timerDuration}s`;
+        const detailsStr = `Tables: ${numbersStr}${allTablesIndicator} | Timer: ${score.timerDuration}s`;
 
         scoreItem.innerHTML = `
             <div class="score-rank">#${index + 1}</div>

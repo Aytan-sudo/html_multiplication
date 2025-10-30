@@ -106,7 +106,30 @@ document.getElementById('reset-button').addEventListener('click', function() {
     }
 });
 
+// Gestion de la checkbox "Toutes les tables"
+function updateAllTablesCheckbox() {
+    const allTablesCheckbox = document.getElementById('all-tables-checkbox');
+    const numberCheckboxes = document.querySelectorAll('input[name="numbers"]:not([disabled])');
+
+    // Verifie si toutes les tables (2-9) sont cochees
+    const allChecked = Array.from(numberCheckboxes).every(cb => cb.checked);
+    allTablesCheckbox.checked = allChecked;
+}
+
+document.getElementById('all-tables-checkbox').addEventListener('change', function() {
+    const numberCheckboxes = document.querySelectorAll('input[name="numbers"]:not([disabled])');
+    numberCheckboxes.forEach(cb => {
+        cb.checked = this.checked;
+    });
+});
+
+// Ecoute les changements sur les checkboxes individuelles pour mettre a jour "Toutes les tables"
+document.querySelectorAll('input[name="numbers"]:not([disabled])').forEach(cb => {
+    cb.addEventListener('change', updateAllTablesCheckbox);
+});
+
 // Charge les données au chargement de la page
 window.addEventListener('DOMContentLoaded', function() {
     loadFormData();
+    updateAllTablesCheckbox();
 });

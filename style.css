@@ -194,6 +194,15 @@ button:active {
     transform: translateY(0);
 }
 
+#start {
+    background-color: #3A3B78;
+}
+
+#start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(58, 59, 120, 0.3);
+}
+
 #save-button {
     background-color: #3A3B78;
 }
@@ -263,8 +272,8 @@ button:active {
 
 .score-item {
     display: grid;
-    grid-template-columns: 50px 180px 120px 100px 130px 180px;
-    gap: 10px;
+    grid-template-columns: 50px 160px 100px 80px 160px 200px;
+    gap: 12px;
     padding: 12px;
     margin-bottom: 8px;
     background-color: rgba(248, 195, 211, 0.3);
