@@ -100,6 +100,7 @@ start_button.addEventListener('click', function(){
     document.getElementById('answer').style.visibility = 'visible';
     document.getElementById('config-button').style.display = 'none';
     document.getElementById('highscores-button').style.display = 'none';
+    document.getElementById('mute-button').style.display = 'none';
     document.getElementById('submitting_answer').focus()
     audio_theme.play()
 })

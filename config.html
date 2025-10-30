@@ -31,14 +31,9 @@
                 <div class="config-section">
                     <h2>Tables a reviser</h2>
                     <div class="checkbox-group">
-                        <label style="opacity: 0.6;">
-                            <input type="checkbox" name="numbers" value="0" checked disabled>
-                            0
-                        </label>
-                        <label style="opacity: 0.6;">
-                            <input type="checkbox" name="numbers" value="1" checked disabled>
-                            1
-                        </label>
+                        <!-- Tables 0, 1 et 10 sont toujours incluses par defaut (masquees visuellement) -->
+                        <input type="checkbox" name="numbers" value="0" checked disabled style="display: none;">
+                        <input type="checkbox" name="numbers" value="1" checked disabled style="display: none;">
                         <label>
                             <input type="checkbox" name="numbers" value="2" checked>
                             2
@@ -71,10 +66,7 @@
                             <input type="checkbox" name="numbers" value="9">
                             9
                         </label>
-                        <label style="opacity: 0.6;">
-                            <input type="checkbox" name="numbers" value="10" checked disabled>
-                            10
-                        </label>
+                        <input type="checkbox" name="numbers" value="10" checked disabled style="display: none;">
                     </div>
                 </div>
 

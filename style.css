@@ -97,7 +97,7 @@ input[type=number] {
     -moz-appearance:textfield;
     border: none;
     border-bottom: 2px solid goldenrod;
-    background-color: #f8c3d3;
+    /* background-color herite de body ou defini dynamiquement par JS */
   }
 
 input::-webkit-outer-spin-button,

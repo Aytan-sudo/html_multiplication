@@ -129,6 +129,12 @@ function validateConfig(config) {
 function applyBackgroundColor() {
     if (gameConfig.bgColor) {
         document.body.style.backgroundColor = gameConfig.bgColor;
+
+        // Applique aussi au champ de saisie s'il existe
+        const inputField = document.getElementById('submitting_answer');
+        if (inputField) {
+            inputField.style.backgroundColor = gameConfig.bgColor;
+        }
     }
 }
 
