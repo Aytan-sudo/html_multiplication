@@ -90,31 +90,31 @@ input::-webkit-inner-spin-button {
 
 #config-container {
     max-width: 800px;
-    margin: 50px auto;
-    padding: 30px;
+    margin: 40px auto;
+    padding: 25px;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-size: 0.6em;
+    font-size: 0.55em;
 }
 
 #config-container h1 {
     text-align: center;
     color: #3A3B78;
-    margin-bottom: 30px;
-    font-size: 2em;
+    margin-bottom: 25px;
+    font-size: 1.8em;
 }
 
 #config-container h2 {
     color: #3A3B78;
-    font-size: 1.3em;
-    margin-bottom: 15px;
+    font-size: 1.2em;
+    margin-bottom: 12px;
     border-bottom: 2px solid goldenrod;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
 }
 
 .config-section {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .radio-group,
@@ -202,7 +202,7 @@ button:active {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-size: 0.6em;
+    font-size: 0.5em;
 }
 
 #highscores-container h1 {
@@ -242,10 +242,10 @@ button:active {
 
 .score-item {
     display: grid;
-    grid-template-columns: 60px 200px 150px 120px 150px 200px;
-    gap: 15px;
-    padding: 15px;
-    margin-bottom: 10px;
+    grid-template-columns: 50px 180px 120px 100px 130px 180px;
+    gap: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
     background-color: rgba(248, 195, 211, 0.3);
     border-radius: 10px;
     align-items: center;

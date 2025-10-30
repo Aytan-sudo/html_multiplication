@@ -1,6 +1,21 @@
 // Charge et affiche les high scores
 function loadAndDisplayScores() {
-    const highscores = JSON.parse(localStorage.getItem('highscores') || '[]');
+    // Charge depuis cookies ou localStorage (pour migration)
+    let highscoresStr = getCookie('highscores');
+    if (!highscoresStr) {
+        try {
+            highscoresStr = localStorage.getItem('highscores');
+            if (highscoresStr) {
+                // Migration vers cookies
+                setCookie('highscores', highscoresStr);
+                localStorage.removeItem('highscores');
+            }
+        } catch (e) {
+            console.log('localStorage non disponible');
+        }
+    }
+
+    const highscores = JSON.parse(highscoresStr || '[]');
     const scoresList = document.getElementById('scores-list');
 
     // Recupere les filtres actifs
@@ -63,7 +78,12 @@ function loadAndDisplayScores() {
 // Efface tous les scores
 document.getElementById('clear-button').addEventListener('click', function() {
     if (confirm('Etes-vous sur de vouloir effacer TOUS les high scores ? Cette action est irreversible.')) {
-        localStorage.removeItem('highscores');
+        // Efface le cookie
+        document.cookie = 'highscores=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // Efface aussi localStorage pour compatibilite
+        try {
+            localStorage.removeItem('highscores');
+        } catch (e) {}
         loadAndDisplayScores();
         alert('Tous les scores ont ete effaces.');
     }

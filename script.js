@@ -79,10 +79,11 @@ start_button.addEventListener('click', function(){
     audio_theme.play()
 })
 
-// Met à jour le texte du bouton de démarrage
+// Met a jour le texte du bouton de demarrage
 function updateStartButtonText() {
-    const names = gameConfig.playerNames.join(' et ');
-    start_button.innerHTML = `C'est parti, ${names} !`;
+    console.log('updateStartButtonText - gameConfig:', gameConfig);
+    console.log('playerName:', gameConfig.playerName);
+    start_button.innerHTML = `C'est parti, ${gameConfig.playerName} !`;
 }
 
 // Met à jour le symbole de l'opération dans le HTML
@@ -135,9 +136,11 @@ function redrawDiamonds() {
 
     const diamondColors = ['diamond_yellow.png', 'diamond_pink.png', 'diamond_shine.png'];
 
-    // Calcule la rangée actuelle (0, 1, 2...)
-    // On utilise currentRow qui est mis à jour dans add_diamonds
-    const diamondsToShow = number_diamonds - (currentRow * gameConfig.diamondsPerRow);
+    // Calcule la rangee actuelle et le nombre de diamants a afficher
+    currentRow = Math.floor((number_diamonds - 1) / gameConfig.diamondsPerRow);
+    if (currentRow < 0) currentRow = 0;
+
+    const diamondsToShow = ((number_diamonds - 1) % gameConfig.diamondsPerRow) + 1;
 
     if (currentRow < gameConfig.totalRows) {
         const colorIndex = Math.min(currentRow, diamondColors.length - 1);
@@ -153,7 +156,7 @@ function saveVictory() {
 
     const victory = {
         date: new Date().toISOString(),
-        players: gameConfig.playerNames.join(' et '),
+        players: gameConfig.playerName,
         time: totalGameTime,
         operation: gameConfig.operation,
         difficulty: gameConfig.difficulty,
@@ -161,8 +164,22 @@ function saveVictory() {
         selectedNumbers: gameConfig.selectedNumbers
     };
 
-    // Recupere les scores existants
-    let highscores = JSON.parse(localStorage.getItem('highscores') || '[]');
+    // Recupere les scores existants depuis cookies ou localStorage
+    let highscoresStr = getCookie('highscores');
+    if (!highscoresStr) {
+        try {
+            highscoresStr = localStorage.getItem('highscores');
+            if (highscoresStr) {
+                // Migration vers cookies
+                setCookie('highscores', highscoresStr);
+                localStorage.removeItem('highscores');
+            }
+        } catch (e) {
+            console.log('localStorage non disponible pour highscores');
+        }
+    }
+
+    let highscores = JSON.parse(highscoresStr || '[]');
 
     // Ajoute le nouveau score
     highscores.push(victory);
@@ -173,8 +190,8 @@ function saveVictory() {
     // Garde les 50 meilleurs scores
     highscores = highscores.slice(0, 50);
 
-    // Sauvegarde
-    localStorage.setItem('highscores', JSON.stringify(highscores));
+    // Sauvegarde dans cookies
+    setCookie('highscores', JSON.stringify(highscores));
 }
 
 // diamonds are the score. Multiple rows of diamonds before victory
@@ -184,23 +201,45 @@ function add_diamonds(x) {
     // Verifie la victoire
     const totalDiamondsNeeded = gameConfig.diamondsPerRow * gameConfig.totalRows;
     if (number_diamonds >= totalDiamondsNeeded) {
+        // Arrete le timer
+        clearInterval(interval);
+
+        // Sauvegarde le high score
+        saveVictory();
+
+        // Calcule le rang du joueur
+        const highscoresStr = getCookie('highscores') || '[]';
+        const highscores = JSON.parse(highscoresStr);
+        const playerRank = highscores.findIndex(score =>
+            score.date === new Date().toISOString().split('.')[0] + '.000Z' ||
+            score.time === totalGameTime && score.players === gameConfig.playerName
+        ) + 1;
+
+        // Formate le temps
+        const minutes = Math.floor(totalGameTime / 60);
+        const seconds = totalGameTime % 60;
+        const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        // Mode de jeu
+        const operationText = gameConfig.operation === 'multiplication' ? 'Multiplication' : 'Addition';
+        const difficultyText = gameConfig.difficulty === 'easy' ? 'Facile' : 'Difficile';
+
         const num_diamonds = document.getElementById("diamonds");
-        num_diamonds.innerHTML = "VICTOIRE !";
+        num_diamonds.innerHTML = `
+            <div style="font-size: 2em; margin-bottom: 20px;">VICTOIRE !</div>
+            <div style="font-size: 1.2em;">
+                <div>Temps: <strong style="color: goldenrod;">${timeStr}</strong></div>
+                <div>Mode: ${operationText} - ${difficultyText}</div>
+                ${playerRank > 0 ? `<div>Rang: <strong>#${playerRank}</strong></div>` : ''}
+            </div>
+        `;
         audio_theme.pause();
         audio_victory.play();
         document.getElementById('question').style.visibility = 'hidden';
         document.getElementById('answer').style.visibility = 'hidden';
+        document.getElementById('temps_restant').style.visibility = 'hidden';
         setInterval(confettis_victory, 750);
-
-        // Sauvegarde le high score
-        saveVictory();
     } else {
-        // Verifie si on change de rangee (quand on atteint 10, 20, 30...)
-        const newRow = Math.floor(number_diamonds / gameConfig.diamondsPerRow);
-        if (newRow > currentRow) {
-            // Changement de rangee : on vide et on recommence avec la nouvelle couleur
-            currentRow = newRow;
-        }
         redrawDiamonds();
     }
 }

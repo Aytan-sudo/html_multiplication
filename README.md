@@ -67,18 +67,21 @@ html_multiplication/
 - **HTML5** : Structure des pages
 - **CSS3** : Design et animations
 - **JavaScript** (vanilla) : Logique du jeu
-- **localStorage** : Sauvegarde des preferences et scores
+- **Cookies** : Sauvegarde des preferences et scores (compatible file://)
 - **canvas-confetti** : Animations de celebration
 
 ## Comment Utiliser
 
-1. Ouvrir `index.html` dans un navigateur web
-2. Cliquer sur l'icone de configuration (roue dentee) pour personnaliser le jeu
+1. Ouvrir `index.html` dans un navigateur web (fonctionne en local avec file://)
+2. Cliquer sur l'icone de configuration pour personnaliser le jeu
 3. Choisir les parametres souhaites et cliquer sur "Sauvegarder et jouer"
-4. Cliquer sur "C'est parti !" pour commencer
-5. Repondre aux questions avant la fin du timer
-6. Collecter 30 diamants pour gagner !
-7. Consulter les high scores en cliquant sur l'icone trophee
+4. Selectionner le joueur (Emilie, Louane, Arthur ou Flora)
+5. Cliquer sur "C'est parti, [nom] !" pour commencer
+6. Repondre aux questions avant la fin du timer
+7. Collecter 30 diamants pour gagner !
+8. Consulter les high scores en cliquant sur l'icone trophee
+
+**Note** : Le jeu utilise des cookies pour sauvegarder la configuration et les scores, ce qui permet de fonctionner sans serveur web.
 
 ## Regles du Jeu
 
@@ -96,7 +99,17 @@ Cree avec amour pour mes enfants
 
 ## Historique des Versions
 
-### Version 1.3 (Actuelle)
+### Version 1.4 (Actuelle)
+- Migration de localStorage vers cookies (compatible file://)
+- Selection d'un seul joueur (Emilie par defaut)
+- Affichage du score et du rang sur l'ecran de victoire
+- Timer masque a la victoire
+- Correction de l'apparition immediate des nouvelles couleurs de diamants
+- Reduction de la taille des interfaces (config et high scores)
+- Ajout de logs de debogage
+- Corrections de bugs multiples
+
+### Version 1.3
 - Ajout du systeme de high scores avec classement
 - Suivi du temps total de jeu
 - Filtres par operation et difficulte dans les scores

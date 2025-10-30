@@ -19,13 +19,11 @@ function loadFormData() {
     // Timer
     document.querySelector(`input[name="timer"][value="${config.timerDuration}"]`).checked = true;
 
-    // Joueurs
-    config.playerNames.forEach(name => {
-        const checkbox = document.querySelector(`input[name="players"][value="${name}"]`);
-        if (checkbox) {
-            checkbox.checked = true;
-        }
-    });
+    // Joueur
+    const playerRadio = document.querySelector(`input[name="player"][value="${config.playerName}"]`);
+    if (playerRadio) {
+        playerRadio.checked = true;
+    }
 }
 
 // Récupère les données du formulaire
@@ -50,9 +48,8 @@ function getFormData() {
     config.totalRows = gameConfig.totalRows;
     config.maxFirstOperand = gameConfig.maxFirstOperand;
 
-    // Joueurs
-    const playersCheckboxes = document.querySelectorAll('input[name="players"]:checked');
-    config.playerNames = Array.from(playersCheckboxes).map(cb => cb.value);
+    // Joueur
+    config.playerName = document.querySelector('input[name="player"]:checked').value;
 
     return config;
 }
@@ -62,6 +59,7 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const newConfig = getFormData();
+    console.log('Config recuperee du formulaire:', newConfig);
 
     // Validation
     if (newConfig.selectedNumbers.length === 0) {
@@ -69,20 +67,23 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
         return;
     }
 
-    if (newConfig.playerNames.length === 0) {
-        alert('Veuillez selectionner au moins un joueur !');
+    if (!newConfig.playerName) {
+        alert('Veuillez selectionner un joueur !');
         return;
     }
 
     // Validation complete
     const validation = validateConfig(newConfig);
+    console.log('Validation:', validation);
     if (!validation.isValid) {
         alert('Erreur de configuration :\n' + validation.errors.join('\n'));
         return;
     }
 
     // Sauvegarde
+    console.log('Sauvegarde de la config:', newConfig);
     if (saveConfig(newConfig)) {
+        console.log('Config sauvegardee, verification:', loadConfig());
         alert('Configuration sauvegardee avec succes !');
         // Redirection vers la page de jeu
         window.location.href = 'index.html';
