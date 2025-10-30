@@ -118,6 +118,7 @@ input::-webkit-inner-spin-button {
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 0.55em;
+    text-align: center;
 }
 
 #config-container h1 {
@@ -274,7 +275,7 @@ button:active {
 
 .score-item {
     display: grid;
-    grid-template-columns: 50px 160px 100px 80px 160px 200px;
+    grid-template-columns: 50px 2fr 1.2fr 1fr 2fr 2.5fr;
     gap: 12px;
     padding: 12px;
     margin-bottom: 8px;
