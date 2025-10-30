@@ -85,7 +85,7 @@ document.getElementById('clear-button').addEventListener('click', function() {
             localStorage.removeItem('highscores');
         } catch (e) {}
         loadAndDisplayScores();
-        alert('Tous les scores ont ete effaces.');
+        // Pas de popup de confirmation, la liste vide suffit comme feedback visuel
     }
 });
 

@@ -89,8 +89,7 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
 
     // Sauvegarde
     if (saveConfig(newConfig)) {
-        alert('Configuration sauvegardee avec succes !');
-        // Redirection vers la page de jeu
+        // Redirection directe vers la page de jeu (pas de popup)
         window.location.href = 'index.html';
     } else {
         alert('Erreur lors de la sauvegarde de la configuration.');
@@ -103,7 +102,7 @@ document.getElementById('reset-button').addEventListener('click', function() {
         gameConfig = resetConfig();
         saveConfig(gameConfig);
         loadFormData();
-        alert('Configuration reinitialisee !');
+        // Pas de popup de confirmation, le rechargement du formulaire suffit
     }
 });
 

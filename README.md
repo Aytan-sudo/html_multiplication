@@ -2,7 +2,7 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition !
 
-**Version 1.3**
+**Version 1.6**
 
 ## Description
 
@@ -20,12 +20,14 @@ Site web interactif pour apprendre et s'entrainer aux tables de multiplication e
 
 ### Configuration du Jeu
 - Choix du type d'operation (multiplication ou addition)
-- Selection des tables a reviser (0 a 10)
+- Selection des tables a reviser (2 a 9) - tables 0, 1 et 10 toujours incluses
 - Deux modes de difficulte :
   - **Facile** : Perte des diamants de la rangee actuelle seulement
   - **Difficile** : Remise a zero complete
-- Choix de la duree du timer
-- Selection des joueurs (jusqu'a 4 joueurs)
+- Choix de la duree du timer (15, 20 ou 30 secondes)
+- Selection d'un joueur (Emilie, Louane, Arthur ou Flora)
+- Choix de la couleur de fond (Rose, Bleu, Vert, Jaune)
+- Bouton mute/unmute pour controler le son
 - Sauvegarde automatique des preferences dans le navigateur
 
 ### High Scores
@@ -57,6 +59,8 @@ html_multiplication/
     ├── erreur.wav         # Son d'erreur
     ├── config.png         # Icone de configuration
     ├── trophee.png        # Icone des high scores
+    ├── mute.png           # Icone son coupe
+    ├── unmute.png         # Icone son active
     ├── diamond_yellow.png # Diamant jaune (rangee 1)
     ├── diamond_pink.png   # Diamant rose (rangee 2)
     └── diamond_shine.png  # Diamant brillant (rangee 3)
@@ -99,15 +103,28 @@ Cree avec amour pour mes enfants
 
 ## Historique des Versions
 
-### Version 1.4 (Actuelle)
+### Version 1.6 (Actuelle)
+- **Experience utilisateur amelioree** : Suppression des popups de confirmation de succes
+- Feedback visuel uniquement (pas de popups intrusifs)
+- Popups conserves uniquement pour les erreurs et confirmations critiques
+- Interface plus fluide et agreable
+
+### Version 1.5
+- Nettoyage complet du code (suppression des console.log de debug)
+- Tables 0, 1 et 10 completement masquees dans l'interface de config
+- Bouton mute/unmute visible uniquement sur l'ecran de debut
+- Couleur de fond appliquee correctement au champ de saisie
+- Code optimise et mieux commente
+
+### Version 1.4
 - Migration de localStorage vers cookies (compatible file://)
 - Selection d'un seul joueur (Emilie par defaut)
 - Affichage du score et du rang sur l'ecran de victoire
 - Timer masque a la victoire
+- Ecran de victoire avec confettis et bouton de retour
 - Correction de l'apparition immediate des nouvelles couleurs de diamants
 - Reduction de la taille des interfaces (config et high scores)
-- Ajout de logs de debogage
-- Corrections de bugs multiples
+- Corrections de bugs multiples (#1 a #11)
 
 ### Version 1.3
 - Ajout du systeme de high scores avec classement

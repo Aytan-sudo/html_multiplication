@@ -1,6 +1,17 @@
 # TODO - html_multiplication
 
-## Bugs a corriger
+## Version 1.6 - Amelioration de l'experience utilisateur
+
+### ~~Suppression des popups intrusifs~~ ✅ FAIT (v1.6)
+- [x] Supprimer alert("Configuration sauvegardee avec succes !") - redirection directe
+- [x] Supprimer alert("Configuration reinitialisee !") - feedback visuel suffit
+- [x] Supprimer alert("Tous les scores ont ete effaces.") - liste vide comme feedback
+- [x] Conserver uniquement les popups d'erreur et confirmations critiques
+- [x] Experience de jeu plus fluide sans interruptions
+
+---
+
+## Bugs a corriger (v1.4 et anterieures)
 
 ### 1. ~~Selection joueur unique~~ ✅ FAIT (v1.4)
 - [x] Modifier config.html pour permettre la selection d'un seul joueur (radio buttons au lieu de checkboxes)
