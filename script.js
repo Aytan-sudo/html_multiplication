@@ -7,6 +7,7 @@ var interval;
 let currentRow = 0; // 0, 1 ou 2 pour les 3 rangees
 let gameStartTime = 0; // timestamp du debut de partie
 let totalGameTime = 0; // temps total en secondes
+let isMuted = false; // etat du son (par defaut: non mute)
 
 // declare the audio
 const audio_theme = new Audio("img/theme.mp3");
@@ -54,6 +55,30 @@ var start_button = document.getElementById("start");
 // Met à jour le texte du bouton au chargement de la page
 window.addEventListener('DOMContentLoaded', function() {
     updateStartButtonText();
+
+    // Gestion du bouton mute/unmute
+    const muteButton = document.getElementById('mute-button');
+    muteButton.addEventListener('click', function() {
+        isMuted = !isMuted;
+
+        // Change l'icone
+        const img = muteButton.querySelector('img');
+        if (isMuted) {
+            img.src = 'img/mute.png';
+            img.alt = 'Son coupe';
+            // Coupe tous les sons
+            audio_theme.muted = true;
+            audio_victory.muted = true;
+            audio_error.muted = true;
+        } else {
+            img.src = 'img/unmute.png';
+            img.alt = 'Son active';
+            // Reactive tous les sons
+            audio_theme.muted = false;
+            audio_victory.muted = false;
+            audio_error.muted = false;
+        }
+    });
 });
 
 start_button.addEventListener('click', function(){
@@ -100,23 +125,26 @@ function start_timer() {
             clearInterval(interval);
             timer = gameConfig.timerDuration;
 
+            // Joue le son d'erreur
+            audio_error.currentTime = 0;
+            audio_error.play();
+
             // Gere la perte selon la difficulte
             if (gameConfig.difficulty === 'hard') {
                 // Mode difficile : remise a zero complete
                 number_diamonds = 0;
                 currentRow = 0;
                 document.getElementById("diamonds").innerHTML = "";
-                alert("Temps ecoule ! Le score est remis a zero.");
             } else {
                 // Mode facile : on perd seulement les diamants de la rangee actuelle
                 const diamondsInCurrentRow = number_diamonds % gameConfig.diamondsPerRow;
                 number_diamonds -= diamondsInCurrentRow;
                 currentRow = Math.floor(number_diamonds / gameConfig.diamondsPerRow);
                 redrawDiamonds();
-                alert(`Temps ecoule ! Vous perdez ${diamondsInCurrentRow} diamant(s).`);
             }
 
             document.getElementById("timer").innerHTML = timer;
+            randomize_numbers();
             start_timer();
         }
     }, 1000);
@@ -224,21 +252,38 @@ function add_diamonds(x) {
         const operationText = gameConfig.operation === 'multiplication' ? 'Multiplication' : 'Addition';
         const difficultyText = gameConfig.difficulty === 'easy' ? 'Facile' : 'Difficile';
 
-        const num_diamonds = document.getElementById("diamonds");
-        num_diamonds.innerHTML = `
-            <div style="font-size: 2em; margin-bottom: 20px;">VICTOIRE !</div>
+        // Affiche les informations de victoire en dessous des diamants
+        const victoryInfo = document.createElement('div');
+        victoryInfo.id = 'victory-info';
+        victoryInfo.style.cssText = 'margin-top: 30px; text-align: center;';
+        victoryInfo.innerHTML = `
+            <div style="font-size: 2em; margin-bottom: 20px; color: goldenrod;">VICTOIRE !</div>
             <div style="font-size: 1.2em;">
                 <div>Temps: <strong style="color: goldenrod;">${timeStr}</strong></div>
                 <div>Mode: ${operationText} - ${difficultyText}</div>
                 ${playerRank > 0 ? `<div>Rang: <strong>#${playerRank}</strong></div>` : ''}
             </div>
+            <button id="return-button" style="margin-top: 30px; padding: 15px 40px; font-family: daydream, verdana; font-size: 1.2em; color: white; background-color: #3A3B78; border: none; border-radius: 10px; cursor: pointer;">Retour a l'ecran titre</button>
         `;
+
+        document.getElementById('main').appendChild(victoryInfo);
+
+        // Gere le bouton de retour
+        document.getElementById('return-button').addEventListener('click', function() {
+            location.reload();
+        });
+
         audio_theme.pause();
         audio_victory.play();
         document.getElementById('question').style.visibility = 'hidden';
         document.getElementById('answer').style.visibility = 'hidden';
         document.getElementById('temps_restant').style.visibility = 'hidden';
-        setInterval(confettis_victory, 750);
+
+        // Lance les confettis pendant 10 secondes
+        const confettiInterval = setInterval(confettis_victory, 750);
+        setTimeout(function() {
+            clearInterval(confettiInterval);
+        }, 10000);
     } else {
         redrawDiamonds();
     }

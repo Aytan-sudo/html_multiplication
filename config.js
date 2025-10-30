@@ -1,13 +1,14 @@
 // Configuration par défaut du jeu
 const defaultConfig = {
     operation: 'multiplication',  // 'addition' ou 'multiplication'
-    selectedNumbers: [2, 3, 4, 5, 10],  // nombres utilisés pour le second opérande
+    selectedNumbers: [0, 1, 2, 3, 4, 5, 10],  // nombres utilisés pour le second opérande
     difficulty: 'hard',  // 'easy' (perte partielle) ou 'hard' (remise à zéro complète)
     timerDuration: 15,  // durée du timer en secondes (15, 20 ou 30)
     diamondsPerRow: 10,  // nombre de diamants par rangée
     totalRows: 3,  // nombre de rangées pour gagner
     maxFirstOperand: 9,  // valeur maximale pour le premier opérande (0 à cette valeur)
-    playerName: 'Emilie'  // nom du joueur (choix: Emilie, Louane, Arthur, Flora)
+    playerName: 'Emilie',  // nom du joueur (choix: Emilie, Louane, Arthur, Flora)
+    bgColor: '#f8c3d3'  // couleur de fond (rose par défaut)
 };
 
 // Fonctions pour gerer les cookies
@@ -138,5 +139,17 @@ function validateConfig(config) {
     };
 }
 
+// Applique la couleur de fond
+function applyBackgroundColor() {
+    if (gameConfig.bgColor) {
+        document.body.style.backgroundColor = gameConfig.bgColor;
+    }
+}
+
 // Initialise la configuration globale
 let gameConfig = loadConfig();
+
+// Applique la couleur de fond au chargement
+window.addEventListener('DOMContentLoaded', function() {
+    applyBackgroundColor();
+});

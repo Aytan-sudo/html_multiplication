@@ -38,34 +38,34 @@
 
 ## Nouveaux bugs a corriger
 
-### 8. Ecran de victoire casse
-- [ ] Les confettis n'apparaissent plus (remplaces par l'ecran de score)
-- [ ] Le timer continue de tourner et affiche un popup "temps ecoule"
-- [ ] Les diamants violets s'affichent apres le timer
-- [ ] SOLUTION : Garder les confettis + afficher le score + masquer le timer + pas de popup
-- [ ] Ajouter un bouton "Retour a l'ecran titre" sur l'ecran de victoire
+### 8. ~~Ecran de victoire casse~~ ✅ FAIT
+- [x] Les confettis n'apparaissent plus (remplaces par l'ecran de score)
+- [x] Le timer continue de tourner et affiche un popup "temps ecoule"
+- [x] Les diamants violets s'affichent apres le timer
+- [x] SOLUTION : Garder les confettis + afficher le score + masquer le timer + pas de popup
+- [x] Ajouter un bouton "Retour a l'ecran titre" sur l'ecran de victoire
 
-### 9. Tables par defaut dans config
-- [ ] Les tables 0, 1 et 10 doivent etre cochees OUI par defaut
-- [ ] Ne pas afficher ces tables dans l'interface (ou les griser/desactiver)
-- [ ] L'utilisateur choisit uniquement les tables de 2 a 9
+### 9. ~~Tables par defaut dans config~~ ✅ FAIT
+- [x] Les tables 0, 1 et 10 doivent etre cochees OUI par defaut
+- [x] Ne pas afficher ces tables dans l'interface (ou les griser/desactiver)
+- [x] L'utilisateur choisit uniquement les tables de 2 a 9
 
-### 10. Bouton mute/unmute
-- [ ] Ajouter un bouton en haut a gauche avec icone son (mute.png / unmute.png)
-- [ ] Par defaut : unmute (son active)
-- [ ] Au clic : toggle entre mute et unmute
-- [ ] Quand mute : couper tous les sons (theme, victory, erreur)
-- [ ] Revenir a unmute par defaut a chaque nouvelle partie
+### 10. ~~Bouton mute/unmute~~ ✅ FAIT
+- [x] Ajouter un bouton en haut a gauche avec icone son (mute.png / unmute.png)
+- [x] Par defaut : unmute (son active)
+- [x] Au clic : toggle entre mute et unmute
+- [x] Quand mute : couper tous les sons (theme, victory, erreur)
+- [x] Revenir a unmute par defaut a chaque nouvelle partie
 
-### 11. Choix de couleur de fond
-- [ ] Ajouter une option dans config.html pour choisir la couleur de fond
-- [ ] Proposer 4 couleurs :
+### 11. ~~Choix de couleur de fond~~ ✅ FAIT
+- [x] Ajouter une option dans config.html pour choisir la couleur de fond
+- [x] Proposer 4 couleurs :
   - Rose actuel (#f8c3d3)
   - Bleu clair (#b3d9ff)
   - Vert pastel (#c8e6c9)
   - Jaune clair (#fff9c4)
-- [ ] Sauvegarder le choix dans la config (cookies)
-- [ ] Appliquer la couleur sur toutes les pages (index, config, highscores)
+- [x] Sauvegarder le choix dans la config (cookies)
+- [x] Appliquer la couleur sur toutes les pages (index, config, highscores)
 
 ## Ameliorations futures (a etudier)
 

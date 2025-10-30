@@ -24,6 +24,12 @@ function loadFormData() {
     if (playerRadio) {
         playerRadio.checked = true;
     }
+
+    // Couleur de fond
+    const bgColorRadio = document.querySelector(`input[name="bgcolor"][value="${config.bgColor}"]`);
+    if (bgColorRadio) {
+        bgColorRadio.checked = true;
+    }
 }
 
 // Récupère les données du formulaire
@@ -50,6 +56,9 @@ function getFormData() {
 
     // Joueur
     config.playerName = document.querySelector('input[name="player"]:checked').value;
+
+    // Couleur de fond
+    config.bgColor = document.querySelector('input[name="bgcolor"]:checked').value;
 
     return config;
 }
