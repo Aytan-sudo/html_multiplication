@@ -4,13 +4,16 @@ let num_A = 0;
 let num_B = 0;
 var timer;
 var interval;
-let currentRow = 0; // 0, 1 ou 2 pour les 3 rangées
+let currentRow = 0; // 0, 1 ou 2 pour les 3 rangees
+let gameStartTime = 0; // timestamp du debut de partie
+let totalGameTime = 0; // temps total en secondes
 
 // declare the audio
 const audio_theme = new Audio("img/theme.mp3");
 audio_theme.loop = true;
 audio_theme.volume=0.8;
 const audio_victory = new Audio("img/victory.mp3");
+const audio_error = new Audio("img/erreur.wav");
 
 // import code of confettis (victory celebration)
 function confettis_victory(){
@@ -47,15 +50,22 @@ function getOperationSymbol() {
 
 // initialization of the game
 var start_button = document.getElementById("start");
+
+// Met à jour le texte du bouton au chargement de la page
+window.addEventListener('DOMContentLoaded', function() {
+    updateStartButtonText();
+});
+
 start_button.addEventListener('click', function(){
     // Initialise le timer avec la configuration
     timer = gameConfig.timerDuration;
     document.getElementById("timer").innerHTML = timer;
 
-    // Met à jour le texte du bouton avec les noms des joueurs
-    updateStartButtonText();
+    // Demarre le chronometre total
+    gameStartTime = Date.now();
+    totalGameTime = 0;
 
-    // Met à jour le symbole de l'opération dans la question
+    // Met a jour le symbole de l'operation dans la question
     updateOperationSymbol();
 
     randomize_numbers();
@@ -63,6 +73,8 @@ start_button.addEventListener('click', function(){
     document.getElementById('start_box').style.visibility = 'hidden';
     document.getElementById('question').style.visibility = 'visible';
     document.getElementById('answer').style.visibility = 'visible';
+    document.getElementById('config-button').style.display = 'none';
+    document.getElementById('highscores-button').style.display = 'none';
     document.getElementById('submitting_answer').focus()
     audio_theme.play()
 })
@@ -87,19 +99,20 @@ function start_timer() {
             clearInterval(interval);
             timer = gameConfig.timerDuration;
 
-            // Gère la perte selon la difficulté
+            // Gere la perte selon la difficulte
             if (gameConfig.difficulty === 'hard') {
-                // Mode difficile : remise à zéro complète
+                // Mode difficile : remise a zero complete
                 number_diamonds = 0;
                 currentRow = 0;
                 document.getElementById("diamonds").innerHTML = "";
-                alert("Temps écoulé ! Le score est remis à zéro.");
+                alert("Temps ecoule ! Le score est remis a zero.");
             } else {
-                // Mode facile : on perd seulement les diamants de la rangée actuelle
+                // Mode facile : on perd seulement les diamants de la rangee actuelle
                 const diamondsInCurrentRow = number_diamonds % gameConfig.diamondsPerRow;
                 number_diamonds -= diamondsInCurrentRow;
+                currentRow = Math.floor(number_diamonds / gameConfig.diamondsPerRow);
                 redrawDiamonds();
-                alert(`Temps écoulé ! Vous perdez ${diamondsInCurrentRow} diamant(s).`);
+                alert(`Temps ecoule ! Vous perdez ${diamondsInCurrentRow} diamant(s).`);
             }
 
             document.getElementById("timer").innerHTML = timer;
@@ -121,22 +134,54 @@ function redrawDiamonds() {
     num_diamonds.innerHTML = "";
 
     const diamondColors = ['diamond_yellow.png', 'diamond_pink.png', 'diamond_shine.png'];
-    currentRow = Math.floor(number_diamonds / gameConfig.diamondsPerRow);
-    const diamondsInCurrentRow = number_diamonds % gameConfig.diamondsPerRow;
+
+    // Calcule la rangée actuelle (0, 1, 2...)
+    // On utilise currentRow qui est mis à jour dans add_diamonds
+    const diamondsToShow = number_diamonds - (currentRow * gameConfig.diamondsPerRow);
 
     if (currentRow < gameConfig.totalRows) {
         const colorIndex = Math.min(currentRow, diamondColors.length - 1);
-        for (let i = 0; i < diamondsInCurrentRow; i++) {
+        for (let i = 0; i < diamondsToShow; i++) {
             num_diamonds.innerHTML += `<img src='img/${diamondColors[colorIndex]}' height=64px/>`;
         }
     }
+}
+
+// Sauvegarde une victoire dans les high scores
+function saveVictory() {
+    totalGameTime = Math.floor((Date.now() - gameStartTime) / 1000); // en secondes
+
+    const victory = {
+        date: new Date().toISOString(),
+        players: gameConfig.playerNames.join(' et '),
+        time: totalGameTime,
+        operation: gameConfig.operation,
+        difficulty: gameConfig.difficulty,
+        timerDuration: gameConfig.timerDuration,
+        selectedNumbers: gameConfig.selectedNumbers
+    };
+
+    // Recupere les scores existants
+    let highscores = JSON.parse(localStorage.getItem('highscores') || '[]');
+
+    // Ajoute le nouveau score
+    highscores.push(victory);
+
+    // Trie par temps (du plus rapide au plus lent)
+    highscores.sort((a, b) => a.time - b.time);
+
+    // Garde les 50 meilleurs scores
+    highscores = highscores.slice(0, 50);
+
+    // Sauvegarde
+    localStorage.setItem('highscores', JSON.stringify(highscores));
 }
 
 // diamonds are the score. Multiple rows of diamonds before victory
 function add_diamonds(x) {
     number_diamonds += x;
 
-    // Vérifie la victoire
+    // Verifie la victoire
     const totalDiamondsNeeded = gameConfig.diamondsPerRow * gameConfig.totalRows;
     if (number_diamonds >= totalDiamondsNeeded) {
         const num_diamonds = document.getElementById("diamonds");
@@ -146,7 +191,16 @@ function add_diamonds(x) {
         document.getElementById('question').style.visibility = 'hidden';
         document.getElementById('answer').style.visibility = 'hidden';
         setInterval(confettis_victory, 750);
+
+        // Sauvegarde le high score
+        saveVictory();
     } else {
+        // Verifie si on change de rangee (quand on atteint 10, 20, 30...)
+        const newRow = Math.floor(number_diamonds / gameConfig.diamondsPerRow);
+        if (newRow > currentRow) {
+            // Changement de rangee : on vide et on recommence avec la nouvelle couleur
+            currentRow = newRow;
+        }
         redrawDiamonds();
     }
 }
@@ -163,16 +217,20 @@ submitting_answer.addEventListener('keydown', function (e) {
             add_diamonds(1);
             reset_timer();
         } else {
-            // Mauvaise réponse
+            // Mauvaise reponse - joue le son d'erreur
+            audio_error.currentTime = 0; // Reinitialise le son pour pouvoir le rejouer immediatement
+            audio_error.play();
+
             if (gameConfig.difficulty === 'hard') {
-                // Mode difficile : remise à zéro complète
+                // Mode difficile : remise a zero complete
                 number_diamonds = 0;
                 currentRow = 0;
                 document.getElementById("diamonds").innerHTML = "";
             } else {
-                // Mode facile : on perd seulement les diamants de la rangée actuelle
+                // Mode facile : on perd seulement les diamants de la rangee actuelle
                 const diamondsInCurrentRow = number_diamonds % gameConfig.diamondsPerRow;
                 number_diamonds -= diamondsInCurrentRow;
+                currentRow = Math.floor(number_diamonds / gameConfig.diamondsPerRow);
                 redrawDiamonds();
             }
         }

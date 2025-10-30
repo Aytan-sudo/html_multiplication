@@ -65,16 +65,16 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
 
     // Validation
     if (newConfig.selectedNumbers.length === 0) {
-        alert('Veuillez sélectionner au moins un nombre !');
+        alert('Veuillez selectionner au moins un nombre !');
         return;
     }
 
     if (newConfig.playerNames.length === 0) {
-        alert('Veuillez sélectionner au moins un joueur !');
+        alert('Veuillez selectionner au moins un joueur !');
         return;
     }
 
-    // Validation complète
+    // Validation complete
     const validation = validateConfig(newConfig);
     if (!validation.isValid) {
         alert('Erreur de configuration :\n' + validation.errors.join('\n'));
@@ -83,7 +83,7 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
 
     // Sauvegarde
     if (saveConfig(newConfig)) {
-        alert('Configuration sauvegardée avec succès !');
+        alert('Configuration sauvegardee avec succes !');
         // Redirection vers la page de jeu
         window.location.href = 'index.html';
     } else {
@@ -91,13 +91,13 @@ document.getElementById('config-form').addEventListener('submit', function(e) {
     }
 });
 
-// Bouton de réinitialisation
+// Bouton de reinitialisation
 document.getElementById('reset-button').addEventListener('click', function() {
-    if (confirm('Voulez-vous vraiment réinitialiser la configuration aux valeurs par défaut ?')) {
+    if (confirm('Voulez-vous vraiment reinitialiser la configuration aux valeurs par defaut ?')) {
         gameConfig = resetConfig();
         saveConfig(gameConfig);
         loadFormData();
-        alert('Configuration réinitialisée !');
+        alert('Configuration reinitialisee !');
     }
 });
 

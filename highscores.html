@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>High Scores - Multiplication</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="highscores-container">
+            <h1>🏆 Tableau des High Scores 🏆</h1>
+
+            <div class="filter-section">
+                <label>
+                    <input type="checkbox" id="filter-multiplication" checked> Multiplication
+                </label>
+                <label>
+                    <input type="checkbox" id="filter-addition" checked> Addition
+                </label>
+                <label>
+                    <input type="checkbox" id="filter-easy" checked> Facile
+                </label>
+                <label>
+                    <input type="checkbox" id="filter-hard" checked> Difficile
+                </label>
+            </div>
+
+            <div id="scores-list">
+                <!-- Les scores seront affiches ici -->
+            </div>
+
+            <div class="button-group">
+                <button id="clear-button">Effacer tous les scores</button>
+                <button id="back-button">Retour au jeu</button>
+            </div>
+        </div>
+
+        <script src="highscores-script.js"></script>
+    </body>
+</html>

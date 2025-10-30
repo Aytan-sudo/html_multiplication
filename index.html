@@ -10,7 +10,12 @@
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     </head>
     <body>
-    <a href="config.html" id="config-button" title="Configuration">⚙️</a>
+    <a href="config.html" id="config-button" title="Configuration">
+        <img src="img/config.png" alt="Configuration" />
+    </a>
+    <a href="highscores.html" id="highscores-button" title="High Scores">
+        <img src="img/trophee.png" alt="High Scores" />
+    </a>
     <div id="main">
         <div id="diamonds"></div>
 
@@ -19,14 +24,14 @@
         </div>
         
         <div id="answer">Reponse ? <br>
-            <input type="number" onfocus="this.value=''" id="submitting_answer" min=0 max=100 />
+            <input type="number" onfocus="this.value=''" id="submitting_answer" min=0 max=200 />
         </div>
 
         <div id="temps_restant">
             <span id = "timer"></span>
         </div>
 
-        <div id="start_box"><button id="start">C'est parti, Emilie et Louane !</button></div>
+        <div id="start_box"><button id="start">C'est parti !</button></div>
     </div>
     </body>
 </html>

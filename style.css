@@ -18,15 +18,38 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    font-size: 2em;
     text-decoration: none;
     cursor: pointer;
     z-index: 1000;
     transition: transform 0.3s;
 }
 
+#config-button img {
+    width: 50px;
+    height: 50px;
+}
+
 #config-button:hover {
     transform: rotate(90deg);
+}
+
+#highscores-button {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+
+#highscores-button img {
+    width: 50px;
+    height: 50px;
+}
+
+#highscores-button:hover {
+    transform: scale(1.2);
 }
 
 #main {
@@ -59,4 +82,282 @@ input[type=number] {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
+}
+
+/* ============================================ */
+/* STYLES POUR LA PAGE DE CONFIGURATION */
+/* ============================================ */
+
+#config-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 0.6em;
+}
+
+#config-container h1 {
+    text-align: center;
+    color: #3A3B78;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+#config-container h2 {
+    color: #3A3B78;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    border-bottom: 2px solid goldenrod;
+    padding-bottom: 5px;
+}
+
+.config-section {
+    margin-bottom: 30px;
+}
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.checkbox-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.checkbox-group label {
+    min-width: 60px;
+}
+
+#config-container label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#config-container input[type="radio"],
+#config-container input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+button {
+    flex: 1;
+    padding: 15px 30px;
+    font-family: daydream, verdana;
+    font-size: 1.5em;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#save-button {
+    background-color: #3A3B78;
+}
+
+#save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(58, 59, 120, 0.3);
+}
+
+#reset-button {
+    background-color: #e74c3c;
+}
+
+#reset-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* ============================================ */
+/* STYLES POUR LA PAGE DES HIGH SCORES */
+/* ============================================ */
+
+#highscores-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 0.6em;
+}
+
+#highscores-container h1 {
+    text-align: center;
+    color: #3A3B78;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.filter-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filter-section label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.filter-section input[type="checkbox"] {
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+#scores-list {
+    margin: 30px 0;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.score-item {
+    display: grid;
+    grid-template-columns: 60px 200px 150px 120px 150px 200px;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: rgba(248, 195, 211, 0.3);
+    border-radius: 10px;
+    align-items: center;
+    font-size: 0.95em;
+}
+
+.score-item:nth-child(1) {
+    background-color: rgba(255, 215, 0, 0.3);
+    font-weight: bold;
+}
+
+.score-item:nth-child(2) {
+    background-color: rgba(192, 192, 192, 0.3);
+    font-weight: bold;
+}
+
+.score-item:nth-child(3) {
+    background-color: rgba(205, 127, 50, 0.3);
+    font-weight: bold;
+}
+
+.score-rank {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #3A3B78;
+    text-align: center;
+}
+
+.score-date {
+    font-size: 0.9em;
+}
+
+.score-players {
+    font-weight: bold;
+    color: #3A3B78;
+}
+
+.score-time {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: goldenrod;
+}
+
+.score-mode {
+    font-size: 0.85em;
+}
+
+.score-details {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.no-scores {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2em;
+    color: #999;
+}
+
+#back-button {
+    background-color: #3A3B78;
+}
+
+#back-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(58, 59, 120, 0.3);
+}
+
+#clear-button {
+    background-color: #e74c3c;
+}
+
+#clear-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* ============================================ */
+/* RESPONSIVE DESIGN */
+/* ============================================ */
+
+@media (max-width: 900px) {
+    .score-item {
+        grid-template-columns: 50px 1fr;
+        gap: 10px;
+    }
+
+    .score-rank {
+        grid-row: 1 / 4;
+    }
+}
+
+@media (max-width: 600px) {
+    #config-container,
+    #highscores-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    #config-container h1 {
+        font-size: 2em;
+    }
+
+    #highscores-container h1 {
+        font-size: 1.5em;
+    }
+
+    #config-container h2 {
+        font-size: 1.2em;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
 }
