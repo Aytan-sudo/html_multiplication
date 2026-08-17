@@ -1,40 +1,113 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Multiplication</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="config.js"></script>
-        <script src="script.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    </head>
-    <body>
-    <button id="mute-button" title="Mute/Unmute">
-        <img src="img/unmute.png" alt="Son active" />
-    </button>
-    <a href="config.html" id="config-button" title="Configuration">
-        <img src="img/config.png" alt="Configuration" />
-    </a>
-    <a href="highscores.html" id="highscores-button" title="High Scores">
-        <img src="img/trophee.png" alt="High Scores" />
-    </a>
-    <div id="main">
-        <div id="diamonds"></div>
-
-        <div id="question">
-            <span id = "NumA"></span> x <span id="NumB"></span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f8c3d3">
+    <meta name="description" content="Jeu educatif pour reviser les tables de multiplication et d'addition.">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Multiplication">
+    <title>Multiplication</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/img/icon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <button id="sound-toggle" class="icon-btn" type="button" title="Couper ou remettre le son" aria-pressed="false">
+            <img src="assets/img/unmute.webp" alt="Son active" width="48" height="48">
+        </button>
+        <div class="topbar-right">
+            <div id="nav-links" class="topbar-right">
+                <a href="highscores.html" class="icon-btn" title="Meilleurs scores">
+                    <img src="assets/img/trophee.webp" alt="Meilleurs scores" width="48" height="48">
+                </a>
+                <a href="config.html" class="icon-btn icon-btn--spin" title="Configuration">
+                    <img src="assets/img/config.webp" alt="Configuration" width="48" height="48">
+                </a>
+            </div>
+            <button id="quit-btn" class="text-btn" type="button" hidden>Quitter</button>
         </div>
-        
-        <div id="answer">Reponse ? <br>
-            <input type="number" onfocus="this.value=''" id="submitting_answer" min=0 max=200 />
-        </div>
+    </header>
 
-        <div id="temps_restant">
-            <span id = "timer"></span>
-        </div>
+    <main class="app">
+        <!-- Ecran titre -->
+        <section id="screen-title" class="screen screen--center">
+            <h1 class="game-title">Multiplication</h1>
+            <button id="start-btn" class="primary-btn" type="button">C'est parti !</button>
+            <p id="mode-summary" class="mode-summary"></p>
+        </section>
 
-        <div id="start_box"><button id="start">C'est parti !</button></div>
+        <!-- Ecran de jeu -->
+        <section id="screen-game" class="screen" hidden>
+            <div class="score-zone">
+                <div id="diamonds" class="diamonds" role="img" aria-label="Score"></div>
+                <p id="progress" class="progress"></p>
+            </div>
+
+            <div id="question-card" class="question-card">
+                <p class="question">
+                    <span id="num-a"></span>
+                    <span id="operator"></span>
+                    <span id="num-b"></span>
+                </p>
+
+                <form id="answer-form" class="answer-form" novalidate>
+                    <label class="sr-only" for="answer-input">Ta reponse</label>
+                    <input id="answer-input"
+                           type="text"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           enterkeyhint="done"
+                           autocomplete="off"
+                           autocorrect="off"
+                           spellcheck="false"
+                           maxlength="4"
+                           placeholder="?">
+                    <button type="submit" class="primary-btn primary-btn--compact">OK</button>
+                </form>
+            </div>
+
+            <div class="timer">
+                <div class="timer-track">
+                    <div id="timer-fill" class="timer-fill"></div>
+                </div>
+                <span id="timer-value" class="timer-value"></span>
+            </div>
+        </section>
+
+        <!-- Ecran de victoire -->
+        <section id="screen-victory" class="screen screen--center" hidden>
+            <h2 class="victory-title">Victoire !</h2>
+            <dl class="victory-stats">
+                <div><dt>Temps</dt><dd id="victory-time"></dd></div>
+                <div><dt>Rang</dt><dd id="victory-rank"></dd></div>
+                <div><dt>Erreurs</dt><dd id="victory-mistakes"></dd></div>
+                <div><dt>Mode</dt><dd id="victory-mode" class="victory-mode"></dd></div>
+            </dl>
+            <div class="victory-actions">
+                <button id="replay-btn" class="primary-btn" type="button">Rejouer</button>
+                <button id="home-btn" class="secondary-btn" type="button">Ecran titre</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pause automatique quand on quitte l'onglet ou l'application -->
+    <div id="pause-overlay" class="pause-overlay" hidden>
+        <div class="pause-box">
+            <p>Partie en pause</p>
+            <button id="resume-btn" class="primary-btn" type="button">Reprendre</button>
+        </div>
     </div>
-    </body>
+
+    <script src="js/storage.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/vendor/confetti.min.js" defer></script>
+    <script src="js/game.js" defer></script>
+    <script src="js/register-sw.js" defer></script>
+</body>
 </html>

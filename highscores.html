@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>High Scores - Multiplication</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="config.js"></script>
-    </head>
-    <body>
-        <div id="highscores-container">
-            <h1>🏆 Tableau des High Scores 🏆</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f8c3d3">
+    <title>Meilleurs scores - Multiplication</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/img/icon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="app">
+        <div class="panel">
+            <h1 class="page-title">Meilleurs scores</h1>
 
-            <div class="filter-section">
-                <label>
-                    <input type="checkbox" id="filter-multiplication" checked> Multiplication
+            <div class="filters">
+                <label class="option">
+                    <input type="checkbox" data-filter="operation" value="multiplication" checked>
+                    <span>Multiplication</span>
                 </label>
-                <label>
-                    <input type="checkbox" id="filter-addition" checked> Addition
+                <label class="option">
+                    <input type="checkbox" data-filter="operation" value="addition" checked>
+                    <span>Addition</span>
                 </label>
-                <label>
-                    <input type="checkbox" id="filter-easy" checked> Facile
+                <label class="option">
+                    <input type="checkbox" data-filter="difficulty" value="easy" checked>
+                    <span>Facile</span>
                 </label>
-                <label>
-                    <input type="checkbox" id="filter-hard" checked> Difficile
+                <label class="option">
+                    <input type="checkbox" data-filter="difficulty" value="hard" checked>
+                    <span>Difficile</span>
                 </label>
             </div>
 
-            <div id="scores-list">
-                <!-- Les scores seront affiches ici -->
-            </div>
+            <div id="scores" class="scores"></div>
 
             <div class="button-group">
-                <button id="clear-button">Effacer tous les scores</button>
-                <button id="back-button">Retour au jeu</button>
+                <button type="button" id="clear-button" class="danger-btn">Tout effacer</button>
+                <button type="button" id="back-button" class="primary-btn">Retour au jeu</button>
             </div>
         </div>
+    </main>
 
-        <script src="highscores-script.js"></script>
-    </body>
+    <script src="js/storage.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/highscores-page.js" defer></script>
+    <script src="js/register-sw.js" defer></script>
+</body>
 </html>

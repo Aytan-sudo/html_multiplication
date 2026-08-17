@@ -1,0 +1,26 @@
+{
+  "name": "Multiplication",
+  "short_name": "Multiplication",
+  "description": "Jeu educatif pour reviser les tables de multiplication et d'addition.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8c3d3",
+  "theme_color": "#f8c3d3",
+  "icons": [
+    {
+      "src": "assets/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

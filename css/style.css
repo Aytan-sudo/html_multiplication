@@ -1,0 +1,751 @@
+/* ============================================================
+   Multiplication - feuille de style unique
+   Concue en mobile d'abord : les regles de base visent le
+   telephone, les media queries elargissent ensuite.
+   ============================================================ */
+
+@font-face {
+    font-family: "daydream";
+    src: url("../assets/fonts/Daydream.ttf") format("truetype");
+    /* Sans swap, le texte reste invisible pendant le telechargement de la
+       police, ce qui est tres visible sur une connexion mobile lente. */
+    font-display: swap;
+}
+
+:root {
+    --bg-color: #f8c3d3;
+    --ink: #3A3B78;
+    --accent: goldenrod;
+    --danger: #e74c3c;
+    --success: #2e9e5b;
+    --panel: rgba(255, 255, 255, 0.92);
+
+    /* Daydream ne contient que 88 glyphes : ni accents, ni signe multiplie.
+       Tout ce qui doit s'ecrire en francais correct passe donc en --font-body. */
+    --font-display: daydream, Verdana, sans-serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --radius: 14px;
+    --gap: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background-color: var(--bg-color);
+    /* Empeche iOS d'agrandir tout seul le texte en mode paysage. */
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--bg-color);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    /* Le jeu ne se scrolle pas : on evite le rebond elastique qui donne
+       l'impression que l'interface est cassee sur iPhone. */
+    overscroll-behavior: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ------------------------------------------------------------ barre du haut */
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    /* Les encoches et la barre de geste d'iOS mordent sur les coins. */
+    padding: calc(env(safe-area-inset-top, 0px) + 0.6rem)
+             calc(env(safe-area-inset-right, 0px) + 0.75rem)
+             0.6rem
+             calc(env(safe-area-inset-left, 0px) + 0.75rem);
+    pointer-events: none;
+}
+
+.topbar > *,
+.topbar-right {
+    pointer-events: auto;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 44px est le minimum recommande pour une cible tactile confortable. */
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.icon-btn img {
+    width: 40px;
+    height: 40px;
+    display: block;
+}
+
+.icon-btn:active {
+    transform: scale(0.9);
+}
+
+/* Les effets de survol n'ont pas de sens au doigt : ils restent colles apres
+   un tap. On les reserve aux appareils qui ont un vrai pointeur. */
+@media (hover: hover) {
+    .icon-btn:hover {
+        transform: scale(1.15);
+    }
+    .icon-btn--spin:hover {
+        transform: rotate(90deg);
+    }
+}
+
+.text-btn {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--panel);
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.7rem 1.1rem;
+    min-height: 44px;
+    cursor: pointer;
+}
+
+/* ------------------------------------------------------------ mise en page */
+
+.app {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: calc(env(safe-area-inset-top, 0px) + 4.5rem)
+             calc(env(safe-area-inset-right, 0px) + 1rem)
+             calc(env(safe-area-inset-bottom, 0px) + 1rem)
+             calc(env(safe-area-inset-left, 0px) + 1rem);
+}
+
+.screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gap);
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.screen--center {
+    justify-content: center;
+    text-align: center;
+}
+
+.screen[hidden] {
+    display: none;
+}
+
+/* ------------------------------------------------------------ ecran titre */
+
+.game-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 9vw, 3.5rem);
+    line-height: 1.3;
+    margin: 0 0 2rem;
+    color: var(--ink);
+}
+
+.mode-summary {
+    font-size: 0.95rem;
+    opacity: 0.75;
+    margin: 1.5rem 0 0;
+}
+
+.primary-btn,
+.secondary-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 4.5vw, 1.4rem);
+    color: #fff;
+    background-color: var(--ink);
+    border: none;
+    border-radius: var(--radius);
+    padding: 1rem 2rem;
+    min-height: 52px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.secondary-btn {
+    background-color: transparent;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 3px var(--ink);
+}
+
+.primary-btn--compact {
+    padding: 1rem 1.4rem;
+    flex: 0 0 auto;
+}
+
+.primary-btn:active,
+.secondary-btn:active {
+    transform: translateY(2px);
+}
+
+@media (hover: hover) {
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(58, 59, 120, 0.35);
+    }
+}
+
+/* ------------------------------------------------------------ diamants */
+
+.score-zone {
+    width: 100%;
+    text-align: center;
+}
+
+.diamonds {
+    /* Dix colonnes fixes : une rangee reste une rangee, quelle que soit la
+       largeur de l'ecran. La v1.7 posait des images de 64px de haut, soit
+       640px de large minimum, ce qui debordait de tout telephone. */
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: clamp(2px, 1vw, 6px);
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    min-height: clamp(30px, 9vw, 64px);
+}
+
+.diamond {
+    width: 100%;
+    max-width: 58px;
+    height: auto;
+    display: block;
+}
+
+.diamond--new {
+    animation: pop 0.35s ease-out;
+}
+
+@keyframes pop {
+    0%   { transform: scale(0.2); opacity: 0; }
+    60%  { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.progress {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 0.6rem 0 0;
+}
+
+/* ------------------------------------------------------------ question */
+
+.question-card {
+    width: 100%;
+    padding: var(--gap);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+/* Retour visuel indispensable : sur un telephone en mode silencieux, le son
+   d'erreur ne dit rien a l'enfant. */
+.question-card.is-correct {
+    animation: flash-ok 0.5s ease-out;
+}
+
+.question-card.is-wrong {
+    animation: flash-ko 0.5s ease-out;
+}
+
+@keyframes flash-ok {
+    0%   { background-color: rgba(46, 158, 91, 0.45); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flash-ko {
+    0%, 40% { background-color: rgba(231, 76, 60, 0.4); }
+    100%    { background-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .diamond--new,
+    .question-card.is-correct,
+    .question-card.is-wrong {
+        animation: none;
+    }
+}
+
+.question {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 14vw, 4.5rem);
+    margin: 0 0 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.4em;
+    line-height: 1.2;
+}
+
+.answer-form {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0.6rem;
+}
+
+#answer-input {
+    font-family: var(--font-display);
+    /* Sous 16px, Safari iOS zoome automatiquement a la mise au point du champ
+       et ne dezoome jamais. Le clamp ne descend donc jamais plus bas. */
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+    text-align: center;
+    width: 100%;
+    max-width: 5.5em;
+    min-height: 52px;
+    padding: 0.4rem 0.5rem;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.55);
+    border: none;
+    border-bottom: 3px solid var(--accent);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+#answer-input:focus {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+}
+
+#answer-input::placeholder {
+    color: var(--ink);
+    opacity: 0.3;
+}
+
+/* ------------------------------------------------------------ timer */
+
+.timer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.timer-track {
+    flex: 1;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.timer-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    /* Legere transition pour lisser les paliers de 100 ms sans donner
+       l'impression d'un retard sur le compteur. */
+    transition: width 0.1s linear, background-color 0.3s;
+}
+
+.timer-fill.is-urgent {
+    background: var(--danger);
+}
+
+.timer-value {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    min-width: 2.2ch;
+    text-align: right;
+}
+
+/* ------------------------------------------------------------ victoire */
+
+.victory-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 11vw, 3.5rem);
+    color: var(--accent);
+    margin: 0 0 1.5rem;
+}
+
+.victory-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 0 2rem;
+    padding: 0;
+}
+
+.victory-stats > div {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 0.8rem 0.5rem;
+}
+
+.victory-stats dt {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.65;
+}
+
+.victory-stats dd {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0.3rem 0 0;
+    color: var(--accent);
+}
+
+.victory-stats dd.victory-mode {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--ink);
+}
+
+.victory-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 320px;
+}
+
+/* ------------------------------------------------------------ pause */
+
+.pause-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(58, 59, 120, 0.75);
+}
+
+.pause-overlay[hidden] {
+    display: none;
+}
+
+.pause-box {
+    background: var(--bg-color);
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    max-width: 90vw;
+}
+
+.pause-box p {
+    font-family: var(--font-display);
+    margin: 0 0 1.5rem;
+}
+
+/* ============================================================
+   Pages secondaires : configuration et scores
+   ============================================================ */
+
+.panel {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--panel);
+    border-radius: 20px;
+    padding: clamp(1rem, 4vw, 2rem);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.page-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 6vw, 2rem);
+    text-align: center;
+    margin: 0 0 1.5rem;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(0.85rem, 4vw, 1.1rem);
+    margin: 0 0 0.9rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.config-section {
+    margin-bottom: 1.8rem;
+}
+
+/* Chaque option est une pastille cliquable de bonne taille : au doigt, un
+   simple radio de 20px est bien trop petit pour etre vise correctement. */
+.option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.option-list--inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius);
+    background: rgba(248, 248, 252, 0.9);
+    box-shadow: inset 0 0 0 2px transparent;
+    cursor: pointer;
+    transition: box-shadow 0.15s, background-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.option:has(input:checked) {
+    background: rgba(58, 59, 120, 0.1);
+    box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.option:has(input:focus-visible) {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.option input {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--ink);
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.option--table {
+    justify-content: center;
+    /* Cinq colonnes par rangee sur telephone, sans jamais descendre sous
+       une cible de 48px. */
+    flex: 1 1 calc(20% - 0.5rem);
+    min-width: 64px;
+    font-family: var(--font-display);
+}
+
+/* La case elle-meme est masquee (la pastille entiere sert de cible), mais on
+   la garde dans le flux pour qu'elle reste atteignable au clavier. */
+.option--table input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.option--all {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.12);
+    flex: 0 0 auto;
+}
+
+.hint {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin: 0.5rem 0 0;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.danger-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 4.5vw, 1.2rem);
+    color: #fff;
+    background-color: var(--danger);
+    border: none;
+    border-radius: var(--radius);
+    padding: 1rem 1.5rem;
+    min-height: 52px;
+    cursor: pointer;
+}
+
+/* ------------------------------------------------------------ scores */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.filters .option {
+    flex: 1 1 calc(50% - 0.5rem);
+    font-size: 0.9rem;
+}
+
+.scores {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* Sur telephone, chaque score est une carte empilee. La v1.7 utilisait une
+   grille de six colonnes dans un conteneur de 1000px minimum. */
+.score {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+        "rank player time"
+        "rank meta   meta";
+    gap: 0.2rem 0.8rem;
+    align-items: center;
+    padding: 0.8rem;
+    border-radius: var(--radius);
+    background: rgba(248, 195, 211, 0.28);
+}
+
+.score:nth-child(1) { background: rgba(255, 215, 0, 0.35); }
+.score:nth-child(2) { background: rgba(192, 192, 192, 0.35); }
+.score:nth-child(3) { background: rgba(205, 127, 50, 0.32); }
+
+.score-rank {
+    grid-area: rank;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    min-width: 2.5ch;
+    text-align: center;
+}
+
+.score-player {
+    grid-area: player;
+    font-weight: 700;
+}
+
+.score-time {
+    grid-area: time;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.score-meta {
+    grid-area: meta;
+    font-size: 0.78rem;
+    opacity: 0.72;
+    line-height: 1.5;
+}
+
+.empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    opacity: 0.6;
+}
+
+/* ============================================================
+   Ecrans plus larges
+   ============================================================ */
+
+@media (min-width: 600px) {
+    .button-group,
+    .victory-actions {
+        flex-direction: row;
+    }
+
+    .button-group > * {
+        flex: 1;
+    }
+
+    .option-list--inline .option--table {
+        flex: 0 0 auto;
+        min-width: 76px;
+    }
+
+    .filters .option {
+        flex: 0 0 auto;
+    }
+
+    .score {
+        grid-template-columns: auto 1.2fr auto 2fr;
+        grid-template-areas: "rank player time meta";
+    }
+
+    .score-meta {
+        text-align: right;
+    }
+
+    .victory-stats {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        max-width: 620px;
+    }
+}
+
+/* Telephone couche : la hauteur devient la ressource rare, on comprime la
+   verticale plutot que de laisser la question sortir de l'ecran. */
+@media (orientation: landscape) and (max-height: 500px) {
+    .app {
+        padding-top: 3.5rem;
+    }
+    .question {
+        font-size: clamp(1.6rem, 7vh, 2.6rem);
+        margin-bottom: 0.6rem;
+    }
+    .question-card {
+        padding: 0.4rem;
+    }
+    .diamond {
+        max-width: 34px;
+    }
+    .game-title {
+        margin-bottom: 1rem;
+    }
+    .progress {
+        display: none;
+    }
+}

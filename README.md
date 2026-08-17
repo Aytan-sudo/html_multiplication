@@ -1,179 +1,208 @@
 # html_multiplication
 
-Un jeu educatif pour reviser les tables de multiplication et d'addition !
+Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 1.7**
+**Version 2.0** &mdash; jouable en ligne, telephone compris :
+**https://aytan-sudo.github.io/html_multiplication/**
 
-## Description
+Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
 
-Site web interactif pour apprendre et s'entrainer aux tables de multiplication et d'addition. Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
+## Le jeu
 
-## Fonctionnalites
+Une operation s'affiche, il faut repondre avant la fin du timer. Chaque bonne
+reponse ajoute un diamant, une erreur en fait perdre. Trois rangees de dix
+diamants et c'est gagne.
 
-### Jeu Principal
-- **Operations** : Multiplication ou addition
-- **Systeme de points** : 3 rangees de 10 diamants de couleurs differentes (jaune, rose, brillant)
-- **Timer configurable** : 15, 20 ou 30 secondes par question
-- **Musique de fond** et effets sonores (victoire et erreurs)
-- **Animation de confettis** a la victoire
-- **Interface coloree** avec police personnalisee
+- **Operations** : multiplication ou addition
+- **Tables** : selection libre de 2 a 9 (0, 1 et 10 toujours presentes)
+- **Timer** : 15, 20 ou 30 secondes par question
+- **Difficulte** : facile (on perd la rangee en cours) ou difficile (retour a zero)
+- **Six joueurs** : Emilie, Louane, Arthur, Flora, Papa, Maman
+- **Meilleurs scores** classes par temps, avec filtres
 
-### Configuration du Jeu
-- Choix du type d'operation (multiplication ou addition)
-- Selection des tables a reviser (2 a 9) - tables 0, 1 et 10 toujours incluses
-- Bouton "Toutes les tables" pour cocher/decocher rapidement toutes les tables
-- Deux modes de difficulte :
-  - **Facile** : Perte des diamants de la rangee actuelle seulement
-  - **Difficile** : Remise a zero complete
-- Choix de la duree du timer (15, 20 ou 30 secondes)
-- Selection d'un joueur (Emilie, Louane, Arthur, Flora, Papa, Maman)
-- Choix de la couleur de fond (Rose, Bleu, Vert, Jaune)
-- Bouton mute/unmute pour controler le son
-- Sauvegarde automatique des preferences dans le navigateur
+## Installation sur telephone
 
-### High Scores
-- Enregistrement automatique de toutes les victoires
-- Affichage du temps total pour completer le jeu
-- Classement du meilleur au moins bon
-- Filtres par type d'operation et difficulte
-- Top 3 mis en evidence (or, argent, bronze)
-- Conservation des 50 meilleurs scores
-- Details complets : date, joueur(s), temps, mode de jeu, tables utilisees
-- Indicateur ⭐ TOUTES pour les parties avec toutes les tables (0-10)
+Ouvrir le lien ci-dessus, puis "Ajouter a l'ecran d'accueil". Le jeu se lance
+alors en plein ecran comme une application, et fonctionne **hors connexion**
+une fois la premiere partie chargee.
 
-## Structure du Projet
+## Nouveautes de la version 2.0
+
+### Jouable au doigt
+
+La v1.7 ne validait la reponse que sur la touche Entree. Comme le pave
+numerique des telephones n'en a pas, le jeu etait litteralement injouable sur
+mobile. Il y a desormais un bouton de validation, le clavier reste ouvert entre
+deux questions, et la mise en page suit la taille de l'ecran.
+
+### Entrainement cible
+
+Le tirage n'est plus uniforme. Le jeu retient les reponses de chaque joueur et
+repose plus souvent les operations ratees :
+
+| | v1.7 | v2.0 |
+|---|---|---|
+| Questions triviales (x0, x1, x10) | 54 % | 20 % |
+| Frequence d'une operation toujours ratee | x1 | x3,5 |
+| Frequence d'une operation maitrisee | x1 | x0,4 |
+
+L'option se desactive dans la configuration pour revenir au tirage au hasard.
+
+### Les scores ne disparaissent plus
+
+La v1.4 etait passee de `localStorage` aux cookies pour pouvoir ouvrir le jeu
+en `file://`. Or un cookie plafonne a 4 Ko : au-dela d'une vingtaine de
+victoires, la sauvegarde echouait **sans aucun message** et tout l'historique
+etait perdu. Le jeu etant maintenant servi en HTTPS, il utilise `localStorage`
+(5 Mo) et reprend automatiquement les anciennes donnees. Les cookies restent en
+repli si le stockage local est interdit.
+
+### Trois fois plus leger
+
+| | v1.7 | v2.0 |
+|---|---|---|
+| Musique de fond | 5,9 Mo | 1,4 Mo |
+| Son de victoire | 672 Ko | 410 Ko |
+| Son d'erreur | 83 Ko | 8 Ko |
+| Images | 115 Ko (PNG) | 53 Ko (WebP) |
+
+La musique n'est plus telechargee au chargement de la page mais au lancement de
+la partie : consulter les scores ne coute plus 6 Mo de donnees mobiles. Le
+confetti est servi depuis le depot au lieu d'un CDN externe.
+
+### Corrections
+
+- Le calcul du rang sur l'ecran de victoire comparait des dates reconstruites a
+  la main et ne trouvait jamais rien ; il s'appuie desormais sur un identifiant
+  unique par partie.
+- La partie se met en pause quand on quitte l'onglet ou l'application, au lieu
+  de laisser le chrono courir pendant un appel telephonique.
+- Le timer vise une echeance absolue : il ne derive plus et resiste au bridage
+  des navigateurs mobiles en arriere-plan.
+- Bonne et mauvaise reponse declenchent un retour visuel, utile quand le son est
+  coupe.
+- Le bouton de son reste accessible pendant la partie, et le choix est conserve.
+- La logique de penalite, dupliquee a deux endroits, est unifiee.
+- Les noms de joueurs sont inseres en texte et jamais interpretes comme du HTML.
+
+## Structure
 
 ```
 html_multiplication/
-├── index.html              # Page principale du jeu
-├── config.html            # Page de configuration
-├── highscores.html        # Page des high scores
-├── style.css              # Styles pour toutes les pages
-├── script.js              # Logique principale du jeu
-├── config.js              # Gestion de la configuration
-├── config-script.js       # Script de la page de configuration
-├── highscores-script.js   # Script de la page des high scores
-├── README.md              # Ce fichier
-└── img/                   # Ressources multimedia
-    ├── Daydream.ttf       # Police personnalisee
-    ├── theme.mp3          # Musique de fond
-    ├── victory.mp3        # Son de victoire
-    ├── erreur.wav         # Son d'erreur
-    ├── config.png         # Icone de configuration
-    ├── trophee.png        # Icone des high scores
-    ├── mute.png           # Icone son coupe
-    ├── unmute.png         # Icone son active
-    ├── diamond_yellow.png # Diamant jaune (rangee 1)
-    ├── diamond_pink.png   # Diamant rose (rangee 2)
-    └── diamond_shine.png  # Diamant brillant (rangee 3)
+├── index.html            # jeu
+├── config.html           # configuration
+├── highscores.html       # meilleurs scores
+├── manifest.webmanifest  # installation sur l'ecran d'accueil
+├── sw.js                 # service worker (mode hors ligne)
+├── css/style.css
+├── js/
+│   ├── storage.js        # localStorage, avec repli cookies et migration
+│   ├── config.js         # valeurs par defaut, chargement, validation
+│   ├── questions.js      # tirage adaptatif des operations
+│   ├── game.js           # moteur du jeu
+│   ├── config-page.js
+│   ├── highscores-page.js
+│   ├── register-sw.js
+│   └── vendor/confetti.min.js
+├── assets/
+│   ├── fonts/Daydream.ttf
+│   ├── audio/            # theme.mp3, victory.mp3, error.mp3
+│   └── img/              # diamants, icones, icones d'application
+├── tests/                # tests sous Node + jsdom
+└── v1.7/                 # version d'origine archivee
 ```
 
-## Technologies Utilisees
+## Une contrainte a connaitre
 
-- **HTML5** : Structure des pages
-- **CSS3** : Design et animations
-- **JavaScript** (vanilla) : Logique du jeu
-- **Cookies** : Sauvegarde des preferences et scores (compatible file://)
-- **canvas-confetti** : Animations de celebration
+`assets/fonts/Daydream.ttf` ne contient que 88 caracteres : **pas d'accents, et
+pas de signe multiplie**. C'est pour cette raison que le texte du jeu s'ecrit
+sans accents et que la multiplication utilise un `x` minuscule. Le texte qui doit
+etre en francais correct (libelles de configuration, tableau des scores) est
+rendu avec la police du systeme.
 
-## Comment Utiliser
+## Developpement
 
-1. Ouvrir `index.html` dans un navigateur web (fonctionne en local avec file://)
-2. Cliquer sur l'icone de configuration pour personnaliser le jeu
-3. Choisir les parametres souhaites et cliquer sur "Sauvegarder et jouer"
-4. Selectionner le joueur (Emilie, Louane, Arthur ou Flora)
-5. Cliquer sur "C'est parti, [nom] !" pour commencer
-6. Repondre aux questions avant la fin du timer
-7. Collecter 30 diamants pour gagner !
-8. Consulter les high scores en cliquant sur l'icone trophee
+Le jeu n'a besoin d'aucun outil de construction. Pour le servir en local :
 
-**Note** : Le jeu utilise des cookies pour sauvegarder la configuration et les scores, ce qui permet de fonctionner sans serveur web.
+```bash
+npm run serve      # http://localhost:8765
+```
 
-## Regles du Jeu
+Le service worker exige un contexte securise : en `file://` ou en HTTP simple,
+le mode hors ligne est inactif, mais le jeu fonctionne normalement.
 
-- Repondre correctement ajoute 1 diamant
-- Une mauvaise reponse ou un timer ecoule :
-  - **Mode facile** : Perte des diamants de la rangee actuelle
-  - **Mode difficile** : Perte de tous les diamants
-- 10 diamants jaunes → passage aux diamants roses
-- 10 diamants roses → passage aux diamants brillants
-- 10 diamants brillants → VICTOIRE !
+Pour lancer les tests (136 assertions sous jsdom) :
 
-## Auteur
+```bash
+npm install
+npm test
+```
 
-Cree avec amour pour mes enfants
+## Version archivee
 
-## Historique des Versions
+La v1.7 reste consultable telle quelle dans `v1.7/`, avec ses propres fichiers
+media, et en ligne sur
+**https://aytan-sudo.github.io/html_multiplication/v1.7/**
 
-### Version 1.7 (Actuelle)
-- **Ajout de 2 nouveaux joueurs** : Papa et Maman (total de 6 joueurs)
-- **Bouton "Toutes les tables"** : Coche/decoche rapidement toutes les tables (2-9)
-- **Indicateur ⭐ TOUTES** dans les high scores pour identifier les parties completes
-- **Amelioration du bouton "C'est parti"** : Couleur bleue (#3A3B78) au lieu de gris
-- **Design responsive des high scores** :
-  - Largeur adaptative (80% sur grands ecrans, 95% sur tablettes)
-  - Colonnes proportionnelles avec fractions (fr) au lieu de pixels fixes
-  - Meilleur affichage sur tous les ecrans
-- **Page config** : Conservation du design original (800px fixes)
+A savoir : la v2 deplace les donnees des cookies vers `localStorage` et efface
+les cookies au passage. L'archive repartira donc d'une configuration par defaut
+et sans historique de scores.
+
+## Historique des versions
+
+### Version 2.0
+
+- Jeu utilisable sur telephone et tablette (bouton de validation, mise en page
+  adaptative, cibles tactiles, gestion des encoches)
+- Installable sur l'ecran d'accueil, fonctionne hors connexion
+- Tirage adaptatif des questions selon les erreurs de chaque joueur
+- Retour a `localStorage`, avec reprise des donnees des versions precedentes
+- Medias divises par trois, musique chargee seulement au lancement de la partie
+- Mise en pause automatique quand on quitte l'application
+- Retour visuel sur bonne et mauvaise reponse
+- Reecriture du moteur, suite de tests automatises
+- Publication sur GitHub Pages
+
+### Version 1.7
+
+- Ajout des joueurs Papa et Maman
+- Bouton "Toutes les tables"
+- Indicateur des parties jouees avec toutes les tables
+- Premieres regles responsive sur la page des scores
 
 ### Version 1.6
-- **Experience utilisateur amelioree** : Suppression des popups de confirmation de succes
-- Feedback visuel uniquement (pas de popups intrusifs)
-- Popups conserves uniquement pour les erreurs et confirmations critiques
-- Interface plus fluide et agreable
+
+- Suppression des popups de confirmation
 
 ### Version 1.5
-- Nettoyage complet du code (suppression des console.log de debug)
-- Tables 0, 1 et 10 completement masquees dans l'interface de config
-- Bouton mute/unmute visible uniquement sur l'ecran de debut
-- Couleur de fond appliquee correctement au champ de saisie
-- Code optimise et mieux commente
+
+- Nettoyage du code, tables 0/1/10 masquees dans la configuration
 
 ### Version 1.4
-- Migration de localStorage vers cookies (compatible file://)
-- Selection d'un seul joueur (Emilie par defaut)
-- Affichage du score et du rang sur l'ecran de victoire
-- Timer masque a la victoire
-- Ecran de victoire avec confettis et bouton de retour
-- Correction de l'apparition immediate des nouvelles couleurs de diamants
-- Reduction de la taille des interfaces (config et high scores)
-- Corrections de bugs multiples (#1 a #11)
+
+- Migration de `localStorage` vers les cookies (compatibilite `file://`)
+- Selection d'un seul joueur, ecran de victoire avec score et rang
 
 ### Version 1.3
-- Ajout du systeme de high scores avec classement
-- Suivi du temps total de jeu
-- Filtres par operation et difficulte dans les scores
-- Son d'erreur lors de mauvaises reponses
-- Remplacement des emojis par des icones PNG
-- Fusion de tous les CSS en un seul fichier
-- Amelioration de l'interface de configuration
+
+- Systeme de meilleurs scores, son d'erreur, icones PNG
 
 ### Version 1.2
-- Ajout de la page de configuration
-- Support des additions en plus des multiplications
-- Deux modes de difficulte (facile/difficile)
-- Timer configurable (15/20/30 secondes)
-- Selection des joueurs (jusqu'a 4)
-- Sauvegarde des preferences dans localStorage
+
+- Page de configuration, additions, modes de difficulte, timer configurable
 
 ### Version 1.1
-- Correction des bugs du timer
-- Correction de la logique d'affichage des diamants
-- Ajout des balises HTML5 et meta tags
-- Optimisation du code
+
+- Corrections du timer et de l'affichage des diamants
 
 ### Version 1.0
-- Version initiale du jeu
-- Tables de multiplication uniquement
-- Systeme de diamants (3 couleurs)
-- Timer de 15 secondes
-- Musique de fond et son de victoire
-- Animation de confettis
+
+- Version initiale : multiplications, diamants, timer, musique, confettis
 
 ## Auteur
 
-Cree avec amour pour mes enfants
+Cree avec amour pour mes enfants.
 
 ## Licence
 
-Projet personnel - Usage libre
+Projet personnel &mdash; usage libre.

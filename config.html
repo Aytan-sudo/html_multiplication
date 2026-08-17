@@ -1,177 +1,105 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Configuration - Multiplication</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="config.js"></script>
-    </head>
-    <body>
-        <div id="config-container">
-            <h1>Configuration du jeu</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f8c3d3">
+    <title>Configuration - Multiplication</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/img/icon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="app">
+        <form id="config-form" class="panel">
+            <h1 class="page-title">Configuration</h1>
 
-            <form id="config-form">
-                <!-- Type d'operation -->
-                <div class="config-section">
-                    <h2>Type d'operation</h2>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="operation" value="multiplication" checked>
-                            Multiplication
-                        </label>
-                        <label>
-                            <input type="radio" name="operation" value="addition">
-                            Addition
-                        </label>
-                    </div>
+            <section class="config-section">
+                <h2 class="section-title">Joueur</h2>
+                <div class="option-list option-list--inline" id="player-options"></div>
+            </section>
+
+            <section class="config-section">
+                <h2 class="section-title">Type d'operation</h2>
+                <div class="option-list">
+                    <label class="option">
+                        <input type="radio" name="operation" value="multiplication">
+                        <span>Multiplication</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="operation" value="addition">
+                        <span>Addition</span>
+                    </label>
                 </div>
+            </section>
 
-                <!-- Tables / Nombres utilises -->
-                <div class="config-section">
-                    <h2>Tables a reviser</h2>
-                    <div style="margin-bottom: 15px;">
-                        <label style="font-weight: bold; font-size: 1.1em;">
-                            <input type="checkbox" id="all-tables-checkbox">
-                            Toutes les tables (2 a 9)
-                        </label>
-                    </div>
-                    <div class="checkbox-group">
-                        <!-- Tables 0, 1 et 10 sont toujours incluses par defaut (masquees visuellement) -->
-                        <input type="checkbox" name="numbers" value="0" checked disabled style="display: none;">
-                        <input type="checkbox" name="numbers" value="1" checked disabled style="display: none;">
-                        <label>
-                            <input type="checkbox" name="numbers" value="2" checked>
-                            2
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="3" checked>
-                            3
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="4" checked>
-                            4
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="5" checked>
-                            5
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="6">
-                            6
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="7">
-                            7
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="8">
-                            8
-                        </label>
-                        <label>
-                            <input type="checkbox" name="numbers" value="9">
-                            9
-                        </label>
-                        <input type="checkbox" name="numbers" value="10" checked disabled style="display: none;">
-                    </div>
+            <section class="config-section">
+                <h2 class="section-title">Tables a reviser</h2>
+                <label class="option option--all">
+                    <input type="checkbox" id="all-tables">
+                    <span>Toutes les tables</span>
+                </label>
+                <div class="option-list option-list--inline" id="table-options"></div>
+                <p class="hint">Les tables de 0, 1 et 10 sont toujours incluses.</p>
+            </section>
+
+            <section class="config-section">
+                <h2 class="section-title">Difficulte</h2>
+                <div class="option-list">
+                    <label class="option">
+                        <input type="radio" name="difficulty" value="easy">
+                        <span>Facile &mdash; on perd la rangee en cours</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="difficulty" value="hard">
+                        <span>Difficile &mdash; on repart de zero</span>
+                    </label>
                 </div>
+            </section>
 
-                <!-- Difficulte -->
-                <div class="config-section">
-                    <h2>Difficulte</h2>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="difficulty" value="easy">
-                            Facile (perte des diamants de la rangee actuelle)
-                        </label>
-                        <label>
-                            <input type="radio" name="difficulty" value="hard" checked>
-                            Difficile (remise a zero complete)
-                        </label>
-                    </div>
+            <section class="config-section">
+                <h2 class="section-title">Duree du timer</h2>
+                <div class="option-list option-list--inline">
+                    <label class="option option--table">
+                        <input type="radio" name="timer" value="15"><span>15 s</span>
+                    </label>
+                    <label class="option option--table">
+                        <input type="radio" name="timer" value="20"><span>20 s</span>
+                    </label>
+                    <label class="option option--table">
+                        <input type="radio" name="timer" value="30"><span>30 s</span>
+                    </label>
                 </div>
+            </section>
 
-                <!-- Duree du timer -->
-                <div class="config-section">
-                    <h2>Duree du timer</h2>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="timer" value="15" checked>
-                            15 secondes
-                        </label>
-                        <label>
-                            <input type="radio" name="timer" value="20">
-                            20 secondes
-                        </label>
-                        <label>
-                            <input type="radio" name="timer" value="30">
-                            30 secondes
-                        </label>
-                    </div>
-                </div>
+            <section class="config-section">
+                <h2 class="section-title">Entrainement cible</h2>
+                <label class="option">
+                    <input type="checkbox" id="adaptive">
+                    <span>Reposer plus souvent les calculs rates</span>
+                </label>
+                <p class="hint">
+                    Le jeu retient les reponses de chaque joueur et propose davantage
+                    les operations qui posent probleme, plutot que de tirer au hasard.
+                </p>
+            </section>
 
-                <!-- Joueur -->
-                <div class="config-section">
-                    <h2>Joueur</h2>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="player" value="Emilie" checked>
-                            Emilie
-                        </label>
-                        <label>
-                            <input type="radio" name="player" value="Louane">
-                            Louane
-                        </label>
-                        <label>
-                            <input type="radio" name="player" value="Arthur">
-                            Arthur
-                        </label>
-                        <label>
-                            <input type="radio" name="player" value="Flora">
-                            Flora
-                        </label>
-                        <label>
-                            <input type="radio" name="player" value="Papa">
-                            Papa
-                        </label>
-                        <label>
-                            <input type="radio" name="player" value="Maman">
-                            Maman
-                        </label>
-                    </div>
-                </div>
+            <section class="config-section">
+                <h2 class="section-title">Couleur de fond</h2>
+                <div class="option-list option-list--inline" id="color-options"></div>
+            </section>
 
-                <!-- Couleur de fond -->
-                <div class="config-section">
-                    <h2>Couleur de fond</h2>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="bgcolor" value="#f8c3d3" checked>
-                            Rose
-                        </label>
-                        <label>
-                            <input type="radio" name="bgcolor" value="#b3d9ff">
-                            Bleu
-                        </label>
-                        <label>
-                            <input type="radio" name="bgcolor" value="#c8e6c9">
-                            Vert
-                        </label>
-                        <label>
-                            <input type="radio" name="bgcolor" value="#fff9c4">
-                            Jaune
-                        </label>
-                    </div>
-                </div>
+            <div class="button-group">
+                <button type="button" id="reset-button" class="danger-btn">Reinitialiser</button>
+                <button type="submit" class="primary-btn">Jouer</button>
+            </div>
+        </form>
+    </main>
 
-                <!-- Boutons -->
-                <div class="button-group">
-                    <button type="button" id="reset-button">Reinitialiser</button>
-                    <button type="submit" id="save-button">Sauvegarder et jouer</button>
-                </div>
-            </form>
-        </div>
-
-        <script src="config-script.js"></script>
-    </body>
+    <script src="js/storage.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/config-page.js" defer></script>
+    <script src="js/register-sw.js" defer></script>
+</body>
 </html>

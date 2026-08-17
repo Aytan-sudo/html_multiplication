@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Configuration - Multiplication</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="config.js"></script>
+    </head>
+    <body>
+        <div id="config-container">
+            <h1>Configuration du jeu</h1>
+
+            <form id="config-form">
+                <!-- Type d'operation -->
+                <div class="config-section">
+                    <h2>Type d'operation</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="operation" value="multiplication" checked>
+                            Multiplication
+                        </label>
+                        <label>
+                            <input type="radio" name="operation" value="addition">
+                            Addition
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tables / Nombres utilises -->
+                <div class="config-section">
+                    <h2>Tables a reviser</h2>
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; font-size: 1.1em;">
+                            <input type="checkbox" id="all-tables-checkbox">
+                            Toutes les tables (2 a 9)
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <!-- Tables 0, 1 et 10 sont toujours incluses par defaut (masquees visuellement) -->
+                        <input type="checkbox" name="numbers" value="0" checked disabled style="display: none;">
+                        <input type="checkbox" name="numbers" value="1" checked disabled style="display: none;">
+                        <label>
+                            <input type="checkbox" name="numbers" value="2" checked>
+                            2
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="3" checked>
+                            3
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="4" checked>
+                            4
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="5" checked>
+                            5
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="6">
+                            6
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="7">
+                            7
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="8">
+                            8
+                        </label>
+                        <label>
+                            <input type="checkbox" name="numbers" value="9">
+                            9
+                        </label>
+                        <input type="checkbox" name="numbers" value="10" checked disabled style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Difficulte -->
+                <div class="config-section">
+                    <h2>Difficulte</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="difficulty" value="easy">
+                            Facile (perte des diamants de la rangee actuelle)
+                        </label>
+                        <label>
+                            <input type="radio" name="difficulty" value="hard" checked>
+                            Difficile (remise a zero complete)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Duree du timer -->
+                <div class="config-section">
+                    <h2>Duree du timer</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="timer" value="15" checked>
+                            15 secondes
+                        </label>
+                        <label>
+                            <input type="radio" name="timer" value="20">
+                            20 secondes
+                        </label>
+                        <label>
+                            <input type="radio" name="timer" value="30">
+                            30 secondes
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Joueur -->
+                <div class="config-section">
+                    <h2>Joueur</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="player" value="Emilie" checked>
+                            Emilie
+                        </label>
+                        <label>
+                            <input type="radio" name="player" value="Louane">
+                            Louane
+                        </label>
+                        <label>
+                            <input type="radio" name="player" value="Arthur">
+                            Arthur
+                        </label>
+                        <label>
+                            <input type="radio" name="player" value="Flora">
+                            Flora
+                        </label>
+                        <label>
+                            <input type="radio" name="player" value="Papa">
+                            Papa
+                        </label>
+                        <label>
+                            <input type="radio" name="player" value="Maman">
+                            Maman
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Couleur de fond -->
+                <div class="config-section">
+                    <h2>Couleur de fond</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="bgcolor" value="#f8c3d3" checked>
+                            Rose
+                        </label>
+                        <label>
+                            <input type="radio" name="bgcolor" value="#b3d9ff">
+                            Bleu
+                        </label>
+                        <label>
+                            <input type="radio" name="bgcolor" value="#c8e6c9">
+                            Vert
+                        </label>
+                        <label>
+                            <input type="radio" name="bgcolor" value="#fff9c4">
+                            Jaune
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="button-group">
+                    <button type="button" id="reset-button">Reinitialiser</button>
+                    <button type="submit" id="save-button">Sauvegarder et jouer</button>
+                </div>
+            </form>
+        </div>
+
+        <script src="config-script.js"></script>
+    </body>
+</html>
