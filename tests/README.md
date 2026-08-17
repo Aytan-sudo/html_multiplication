@@ -17,6 +17,7 @@ npm test
 | `test-pages.js` | Page de configuration (construction du formulaire, case "toutes les tables", validation, reinitialisation) et page des scores (tri, filtres, effacement, echappement des noms). |
 | `test-migration.js` | Reprise des cookies laisses par la v1.7 vers localStorage, et repli sur les cookies quand le stockage local est interdit. |
 | `test-picker.js` | Comportement statistique du tirage adaptatif sur 20 000 questions. |
+| `test-live.js` | Verification du site reellement publie sur GitHub Pages : balises mobiles, manifeste, partie complete jouee sur les fichiers telecharges, poids du premier chargement, archive v1.7 toujours en ligne. Se lance a part avec `npm run test:live` (necessite une connexion). |
 
 ## Une particularite du harnais
 
