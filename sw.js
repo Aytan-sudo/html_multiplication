@@ -3,7 +3,7 @@
 // est mauvais.
 //
 // Changer ce numero de version force le remplacement de tout l'ancien cache.
-const CACHE = 'multiplication-v2.0.0';
+const CACHE = 'multiplication-v2.1.0';
 
 // La musique n'est pas prechargee : 1,5 Mo imposes a quelqu'un qui ouvre juste
 // la page serait exactement le probleme qu'on cherche a corriger. Elle rejoint
@@ -15,6 +15,7 @@ const SHELL = [
     './highscores.html',
     './manifest.webmanifest',
     './css/style.css',
+    './js/viewport.js',
     './js/storage.js',
     './js/config.js',
     './js/questions.js',

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="page-game">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- interactive-widget=resizes-content : sur Android, le clavier retrecit
+         alors la zone de mise en page au lieu de recouvrir le contenu. iOS
+         l'ignore, c'est js/viewport.js qui prend le relais. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="theme-color" content="#f8c3d3">
     <meta name="description" content="Jeu educatif pour reviser les tables de multiplication et d'addition.">
     <meta name="mobile-web-app-capable" content="yes">
@@ -14,26 +17,29 @@
     <link rel="icon" href="assets/img/icon-192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="assets/img/icon-192.png">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Sans defer : la hauteur reelle doit etre connue avant le premier
+         rendu, sinon le jeu s'affiche brievement a la mauvaise taille. -->
+    <script src="js/viewport.js"></script>
 </head>
 <body>
-    <header class="topbar">
-        <button id="sound-toggle" class="icon-btn" type="button" title="Couper ou remettre le son" aria-pressed="false">
-            <img src="assets/img/unmute.webp" alt="Son active" width="48" height="48">
-        </button>
-        <div class="topbar-right">
-            <div id="nav-links" class="topbar-right">
-                <a href="highscores.html" class="icon-btn" title="Meilleurs scores">
-                    <img src="assets/img/trophee.webp" alt="Meilleurs scores" width="48" height="48">
-                </a>
-                <a href="config.html" class="icon-btn icon-btn--spin" title="Configuration">
-                    <img src="assets/img/config.webp" alt="Configuration" width="48" height="48">
-                </a>
-            </div>
-            <button id="quit-btn" class="text-btn" type="button" hidden>Quitter</button>
-        </div>
-    </header>
-
     <main class="app">
+        <header class="topbar">
+            <button id="sound-toggle" class="icon-btn" type="button" title="Couper ou remettre le son" aria-pressed="false">
+                <img src="assets/img/unmute.webp" alt="Son active" width="40" height="40">
+            </button>
+            <div class="topbar-right">
+                <div id="nav-links" class="topbar-right">
+                    <a href="highscores.html" class="icon-btn" title="Meilleurs scores">
+                        <img src="assets/img/trophee.webp" alt="Meilleurs scores" width="40" height="40">
+                    </a>
+                    <a href="config.html" class="icon-btn icon-btn--spin" title="Configuration">
+                        <img src="assets/img/config.webp" alt="Configuration" width="40" height="40">
+                    </a>
+                </div>
+                <button id="quit-btn" class="text-btn" type="button" hidden>Quitter</button>
+            </div>
+        </header>
+
         <!-- Ecran titre -->
         <section id="screen-title" class="screen screen--center">
             <h1 class="game-title">Multiplication</h1>
@@ -48,7 +54,11 @@
                 <p id="progress" class="progress"></p>
             </div>
 
-            <div id="question-card" class="question-card">
+            <div class="question-area">
+                <!-- La zone souple centre le contenu ; c'est la boite interne,
+                     dimensionnee par son contenu, qui porte le retour visuel :
+                     un flash sur la zone entiere remplissait tout l'ecran. -->
+                <div id="question-box" class="question-box">
                 <p class="question">
                     <span id="num-a"></span>
                     <span id="operator"></span>
@@ -69,6 +79,7 @@
                            placeholder="?">
                     <button type="submit" class="primary-btn primary-btn--compact">OK</button>
                 </form>
+                </div>
             </div>
 
             <div class="timer">

@@ -42,6 +42,41 @@
 
 ---
 
+## Version 2.1 &mdash; clavier virtuel et debordements ✅ FAIT
+
+### Le clavier ne recouvre plus le jeu
+- [x] Mesure de la zone visible via `window.visualViewport` (`js/viewport.js`)
+- [x] `interactive-widget=resizes-content` pour Android
+- [x] Quatre niveaux de compacite selon la hauteur disponible
+- [x] Cadre de jeu en position fixe, cale sur `visualViewport.offsetTop` (iOS)
+- [x] Barre du haut remise dans le flux : en `fixed`, elle derivait sur iOS
+- [x] Le champ de saisie ne descend jamais sous 16 px (sinon Safari zoome)
+
+### Debordements corriges
+- [x] Bouton Quitter coupe sur petit ecran (`min-width: 0` manquant)
+- [x] Icones trophee et config visibles pendant la partie : `display: flex`
+      neutralisait l'attribut `hidden`
+- [x] Prenoms des joueurs qui se chevauchaient dans la configuration
+- [x] Flash de bonne reponse qui peignait la moitie de l'ecran
+
+### Mise en page
+- [x] Question centree verticalement au lieu d'un `space-between` qui etalait
+      trois blocs sur toute la hauteur
+- [x] Rangee de diamants dessinee en entier, emplacements a gagner en
+      transparence : plus de sursaut a chaque bonne reponse
+- [x] Mode paysage simplifie (la mise en colonnes repoussait la question
+      dans un coin)
+
+### Verification
+- [x] Tests de mise en page mesures dans un vrai Chrome, neuf tailles d'ecran,
+      clavier ferme et clavier ouvert, sur les deux comportements iOS/Android
+- [x] Detection des elements rognes par `overflow: hidden`, invisibles pour
+      un controle de `scrollWidth`
+- [x] Detection des textes qui debordent de leur pastille et des pastilles
+      qui se recouvrent
+
+---
+
 ## Pistes pour la suite
 
 ### Page de statistiques

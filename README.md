@@ -2,7 +2,7 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 2.0** &mdash; jouable en ligne, telephone compris :
+**Version 2.1** &mdash; jouable en ligne, telephone compris :
 **https://aytan-sudo.github.io/html_multiplication/**
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
@@ -26,7 +26,7 @@ Ouvrir le lien ci-dessus, puis "Ajouter a l'ecran d'accueil". Le jeu se lance
 alors en plein ecran comme une application, et fonctionne **hors connexion**
 une fois la premiere partie chargee.
 
-## Nouveautes de la version 2.0
+## Ce qui a change depuis la v1.7
 
 ### Jouable au doigt
 
@@ -34,6 +34,29 @@ La v1.7 ne validait la reponse que sur la touche Entree. Comme le pave
 numerique des telephones n'en a pas, le jeu etait litteralement injouable sur
 mobile. Il y a desormais un bouton de validation, le clavier reste ouvert entre
 deux questions, et la mise en page suit la taille de l'ecran.
+
+### Le clavier virtuel ne recouvre plus le jeu
+
+`100dvh` tient compte des barres du navigateur mais pas du clavier. Sur iOS, ni
+`window.innerHeight` ni `100dvh` ne bougent quand le clavier s'ouvre : la page
+reste haute de tout l'ecran alors que la moitie basse est cachee, et le chrono
+se retrouve dessous.
+
+`js/viewport.js` mesure donc la zone reellement visible avec
+`window.visualViewport` et l'expose en variable CSS. Le jeu occupe exactement
+cette zone, et quatre niveaux de compacite retrecissent progressivement les
+tailles au lieu de laisser quoi que ce soit deborder :
+
+| Hauteur disponible | Ce qui change |
+|---|---|
+| plus de 640 px | tailles pleines |
+| 520 a 640 px | police et cibles reduites |
+| 300 a 520 px | mode serre, la ligne de progression disparait |
+| moins de 300 px | la rangee de diamants est masquee au profit de la question |
+
+Le cas le plus dur, telephone couche avec le clavier ouvert, ne laisse que
+190 px : tout y tient encore. Sur Android, `interactive-widget=resizes-content`
+fait deja retrecir la fenetre, et la mesure prend le relais partout ailleurs.
 
 ### Entrainement cible
 
@@ -96,6 +119,7 @@ html_multiplication/
 ├── sw.js                 # service worker (mode hors ligne)
 ├── css/style.css
 ├── js/
+│   ├── viewport.js       # mesure la zone visible, gere le clavier virtuel
 │   ├── storage.js        # localStorage, avec repli cookies et migration
 │   ├── config.js         # valeurs par defaut, chargement, validation
 │   ├── questions.js      # tirage adaptatif des operations
@@ -108,7 +132,7 @@ html_multiplication/
 │   ├── fonts/Daydream.ttf
 │   ├── audio/            # theme.mp3, victory.mp3, error.mp3
 │   └── img/              # diamants, icones, icones d'application
-├── tests/                # tests sous Node + jsdom
+├── tests/                # jsdom, plus mesures de mise en page sous Chrome
 └── v1.7/                 # version d'origine archivee
 ```
 
@@ -131,12 +155,20 @@ npm run serve      # http://localhost:8765
 Le service worker exige un contexte securise : en `file://` ou en HTTP simple,
 le mode hors ligne est inactif, mais le jeu fonctionne normalement.
 
-Pour lancer les tests (136 assertions sous jsdom) :
+Pour lancer les tests :
 
 ```bash
 npm install
-npm test
+npm test                                 # 141 assertions sous jsdom
+npx puppeteer browsers install chrome    # une seule fois
+npm run test:layout                      # 457 mesures dans un vrai Chrome
+npm run test:live                        # verifie le site publie
 ```
+
+Le test de mise en page ouvre le jeu sur neuf tailles d'ecran, clavier ferme
+puis clavier ouvert, et verifie qu'aucun element n'est rogne. Voir
+`tests/README.md` pour ce que cette approche attrape et qu'un DOM sans calcul
+de position laisse passer.
 
 ## Version archivee
 
@@ -149,6 +181,18 @@ les cookies au passage. L'archive repartira donc d'une configuration par defaut
 et sans historique de scores.
 
 ## Historique des versions
+
+### Version 2.1 (actuelle)
+
+- Le clavier virtuel ne recouvre plus le jeu, sur iOS comme sur Android
+- Quatre niveaux de compacite selon la hauteur reellement disponible
+- Le bouton Quitter n'est plus coupe sur les petits ecrans
+- Les icones trophee et configuration disparaissent bien pendant la partie
+- Les prenoms des joueurs ne se chevauchent plus dans la configuration
+- Rangee de diamants toujours dessinee en entier, emplacements a gagner en
+  transparence : plus de sursaut de mise en page a chaque bonne reponse
+- Question centree verticalement, retour visuel limite a la boite de question
+- Tests de mise en page mesures dans un vrai navigateur
 
 ### Version 2.0
 

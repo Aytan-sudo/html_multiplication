@@ -2,3 +2,4 @@
 *.swp
 _sources/
 node_modules/
+tests/shots/

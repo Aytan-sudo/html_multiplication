@@ -1,14 +1,16 @@
 {
   "name": "html-multiplication",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "Jeu educatif pour reviser les tables de multiplication et d'addition.",
   "scripts": {
     "test": "node tests/test-game.js && node tests/test-pages.js && node tests/test-migration.js && node tests/test-picker.js",
     "serve": "python3 -m http.server 8765",
-    "test:live": "node tests/test-live.js"
+    "test:live": "node tests/test-live.js",
+    "test:layout": "node tests/test-layout.js"
   },
   "devDependencies": {
-    "jsdom": "^26.0.0"
+    "jsdom": "^26.0.0",
+    "puppeteer": "^25.0.0"
   }
 }

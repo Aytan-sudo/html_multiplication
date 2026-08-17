@@ -11,7 +11,7 @@ function buildPlayerOptions() {
     const container = document.getElementById('player-options');
     container.replaceChildren(...PLAYERS.map(name => {
         const label = document.createElement('label');
-        label.className = 'option option--table';
+        label.className = 'option option--name';
         label.innerHTML = `<input type="radio" name="player" value="${name}"><span>${name}</span>`;
         return label;
     }));

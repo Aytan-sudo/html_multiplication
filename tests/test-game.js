@@ -58,6 +58,11 @@ async function boot() {
 const $ = (w, id) => w.document.getElementById(id);
 const submit = w => $(w, 'answer-form').dispatchEvent(new w.Event('submit', { cancelable: true }));
 
+// La rangee est toujours dessinee en entier ; seuls les diamants sans la
+// classe --empty sont reellement gagnes.
+const won = w => $(w, 'diamonds').querySelectorAll('.diamond:not(.diamond--empty)');
+const slots = w => $(w, 'diamonds').querySelectorAll('.diamond');
+
 function answerCorrectly(w) {
     const fact = w.__t.state.fact;
     const op = w.__t.gameConfig.operation;
@@ -97,10 +102,13 @@ function answerWrongly(w) {
     console.log('\n--- Bonne reponse ---');
     answerCorrectly(w);
     check('un diamant est ajoute', w.__t.state.diamonds === 1);
-    check('un diamant est dessine', $(w, 'diamonds').children.length === 1);
-    check('le dernier diamant est anime', $(w, 'diamonds').lastChild.classList.contains('diamond--new'));
+    check('un diamant est gagne', won(w).length === 1);
+    check('la rangee entiere est dessinee', slots(w).length === 10, `-> ${slots(w).length}`);
+    check('le diamant gagne est anime', won(w)[0].classList.contains('diamond--new'));
+    check('les 9 autres sont en attente',
+          $(w, 'diamonds').querySelectorAll('.diamond--empty').length === 9);
     check('le champ est vide', $(w, 'answer-input').value === '');
-    check('retour visuel vert', $(w, 'question-card').classList.contains('is-correct'));
+    check('retour visuel vert', $(w, 'question-box').classList.contains('is-correct'));
     check('progression rangee 1 sur 3', $(w, 'progress').textContent === 'Rangee 1 sur 3',
           `-> "${$(w, 'progress').textContent}"`);
 
@@ -109,8 +117,9 @@ function answerWrongly(w) {
     check('5 diamants accumules', w.__t.state.diamonds === 5);
     answerWrongly(w);
     check('remise a zero complete', w.__t.state.diamonds === 0);
-    check('plus aucun diamant affiche', $(w, 'diamonds').children.length === 0);
-    check('retour visuel rouge', $(w, 'question-card').classList.contains('is-wrong'));
+    check('plus aucun diamant gagne', won(w).length === 0);
+    check('la rangee vide reste dessinee', slots(w).length === 10);
+    check('retour visuel rouge', $(w, 'question-box').classList.contains('is-wrong'));
     check("le son d'erreur est joue", played.some(s => s.includes('error')));
 
     console.log('\n--- Temps ecoule ---');
@@ -151,14 +160,18 @@ function answerWrongly(w) {
     ({ window: w, played } = await boot());
     $(w, 'start-btn').click();
     for (let i = 0; i < 10; i++) answerCorrectly(w);
-    check('10 diamants = rangee 1 complete', $(w, 'diamonds').children.length === 10);
-    check('les diamants sont jaunes', $(w, 'diamonds').firstChild.src.includes('diamond_yellow'));
+    check('10 diamants = rangee 1 complete', won(w).length === 10);
+    check('aucun emplacement vide ne reste',
+          $(w, 'diamonds').querySelectorAll('.diamond--empty').length === 0);
+    check('les diamants sont jaunes', won(w)[0].src.includes('diamond_yellow'));
     answerCorrectly(w);
-    check('11e diamant = 1 diamant rose', $(w, 'diamonds').children.length === 1
-          && $(w, 'diamonds').firstChild.src.includes('diamond_pink'));
+    check('11e diamant = 1 diamant rose', won(w).length === 1
+          && won(w)[0].src.includes('diamond_pink'));
+    check('la nouvelle rangee montre 9 emplacements roses',
+          $(w, 'diamonds').querySelectorAll('.diamond--empty').length === 9);
     check('progression rangee 2 sur 3', $(w, 'progress').textContent === 'Rangee 2 sur 3');
     for (let i = 0; i < 10; i++) answerCorrectly(w);
-    check('21e diamant = diamant brillant', $(w, 'diamonds').firstChild.src.includes('diamond_shine'));
+    check('21e diamant = diamant brillant', won(w)[0].src.includes('diamond_shine'));
 
     for (let i = 0; i < 9; i++) answerCorrectly(w);
     check('30 diamants atteints', w.__t.state.diamonds === 30);

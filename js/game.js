@@ -81,13 +81,21 @@ function renderDiamonds() {
 
     // Un fragment plutot que « innerHTML += » dans une boucle : la v1.7
     // reparsait tout le conteneur a chaque diamant ajoute.
+    //
+    // La rangee est toujours dessinee en entier, les emplacements non encore
+    // gagnes en transparence. La hauteur du bloc ne change donc jamais et la
+    // mise en page ne sursaute pas a chaque bonne reponse.
     const fragment = document.createDocumentFragment();
-    for (let i = 0; i < inRow; i++) {
+    for (let i = 0; i < perRow; i++) {
         const img = document.createElement('img');
         img.src = `assets/img/${image}`;
         img.alt = '';
         img.className = 'diamond';
-        if (i === inRow - 1) img.classList.add('diamond--new');
+        if (i >= inRow) {
+            img.classList.add('diamond--empty');
+        } else if (i === inRow - 1) {
+            img.classList.add('diamond--new');
+        }
         fragment.appendChild(img);
     }
     el.diamonds.replaceChildren(fragment);
@@ -335,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modeSummary: document.getElementById('mode-summary'),
         diamonds: document.getElementById('diamonds'),
         progress: document.getElementById('progress'),
-        questionCard: document.getElementById('question-card'),
+        questionCard: document.getElementById('question-box'),
         numA: document.getElementById('num-a'),
         numB: document.getElementById('num-b'),
         operator: document.getElementById('operator'),

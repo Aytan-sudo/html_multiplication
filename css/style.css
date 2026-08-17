@@ -1,14 +1,15 @@
 /* ============================================================
    Multiplication - feuille de style unique
-   Concue en mobile d'abord : les regles de base visent le
-   telephone, les media queries elargissent ensuite.
+   Mobile d'abord. La hauteur disponible est mesuree par
+   js/viewport.js et exposee en --app-h ; le niveau de compacite
+   (data-compact) retrecit le jeu au lieu de le laisser deborder.
    ============================================================ */
 
 @font-face {
     font-family: "daydream";
     src: url("../assets/fonts/Daydream.ttf") format("truetype");
     /* Sans swap, le texte reste invisible pendant le telechargement de la
-       police, ce qui est tres visible sur une connexion mobile lente. */
+       police, tres perceptible sur une connexion mobile lente. */
     font-display: swap;
 }
 
@@ -21,12 +22,84 @@
     --panel: rgba(255, 255, 255, 0.92);
 
     /* Daydream ne contient que 88 glyphes : ni accents, ni signe multiplie.
-       Tout ce qui doit s'ecrire en francais correct passe donc en --font-body. */
+       Tout ce qui doit s'ecrire en francais correct passe en --font-body. */
     --font-display: daydream, Verdana, sans-serif;
     --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
     --radius: 14px;
-    --gap: clamp(0.75rem, 3vw, 1.5rem);
+
+    /* Repli si le JavaScript de mesure n'a pas encore tourne. */
+    --app-h: 100dvh;
+    --app-top: 0px;
+
+    /* Jetons de taille, redefinis par niveau de compacite plus bas.
+       Ne jamais descendre la taille du champ sous 16 px : en dessous, Safari
+       iOS zoome a la mise au point du champ et ne dezoome jamais. */
+    --question-size: clamp(2.4rem, 16vw, 5rem);
+    --input-size: clamp(1.6rem, 8vw, 2.6rem);
+    --diamond-max: 56px;
+    --icon-size: 40px;
+    --touch: 44px;
+    --gap: clamp(0.6rem, 2.5vw, 1.4rem);
+    --btn-size: clamp(1rem, 4.5vw, 1.35rem);
+    --btn-pad: 1rem 2rem;
+    --topbar-pad: 0.4rem;
+}
+
+/* Hauteur reduite : petit telephone debout, ou telephone couche. */
+:root[data-compact="1"] {
+    --question-size: clamp(1.7rem, 8vw, 2.6rem);
+    --input-size: clamp(1.25rem, 5.5vw, 1.8rem);
+    --diamond-max: 34px;
+    --icon-size: 32px;
+    --touch: 40px;
+    --gap: 0.5rem;
+    --btn-size: 1rem;
+    --btn-pad: 0.7rem 1.4rem;
+    --topbar-pad: 0.35rem;
+}
+
+/* Hauteur serree : c'est le cas du clavier ouvert, ou il ne reste souvent
+   que 350 a 450 px. Tout doit tenir sans defilement. */
+:root[data-compact="2"] {
+    --question-size: clamp(1.5rem, 7vw, 2.1rem);
+    --input-size: 1.1rem;
+    --diamond-max: 22px;
+    --icon-size: 28px;
+    --touch: 36px;
+    --gap: 0.35rem;
+    --btn-size: 0.9rem;
+    --btn-pad: 0.6rem 1.1rem;
+    --topbar-pad: 0.3rem;
+}
+
+/* Hauteur extreme : telephone couche avec le clavier ouvert, il ne reste
+   parfois que 190 px. Meme tasse au maximum, le compte n'y est pas : la
+   rangee de diamants passe a la trappe. C'est le bon sacrifice, l'enfant est
+   en train de taper et regarde la question, pas son score. */
+:root[data-compact="3"] {
+    --question-size: clamp(1.25rem, 5vw, 1.7rem);
+    /* Jamais sous 16 px, sinon Safari iOS zoome a la mise au point. */
+    --input-size: 1rem;
+    --diamond-max: 18px;
+    --icon-size: 24px;
+    --touch: 32px;
+    --gap: 0.25rem;
+    --btn-size: 0.85rem;
+    --btn-pad: 0.4rem 0.8rem;
+    --topbar-pad: 0.2rem;
+}
+
+:root[data-compact="3"] .score-zone {
+    display: none;
+}
+
+:root[data-compact="3"] .timer-value {
+    font-size: 0.85rem;
+}
+
+:root[data-compact="3"] .timer-track {
+    height: 8px;
 }
 
 *,
@@ -35,21 +108,26 @@
     box-sizing: border-box;
 }
 
+/* L'attribut hidden n'est qu'un `display: none` de la feuille par defaut du
+   navigateur : n'importe quelle regle posant un display le neutralise. Sans ce
+   !important, les icones trophee et configuration restaient visibles pendant
+   la partie parce que .topbar-right declare `display: flex`. */
+[hidden] {
+    display: none !important;
+}
+
 html {
     background-color: var(--bg-color);
-    /* Empeche iOS d'agrandir tout seul le texte en mode paysage. */
+    /* Empeche iOS d'agrandir le texte tout seul en mode paysage. */
     -webkit-text-size-adjust: 100%;
 }
 
 body {
     margin: 0;
-    min-height: 100dvh;
     background-color: var(--bg-color);
     color: var(--ink);
     font-family: var(--font-body);
     font-size: 16px;
-    /* Le jeu ne se scrolle pas : on evite le rebond elastique qui donne
-       l'impression que l'interface est cassee sur iPhone. */
     overscroll-behavior: none;
 }
 
@@ -65,44 +143,79 @@ body {
     border: 0;
 }
 
-/* ------------------------------------------------------------ barre du haut */
+/* ============================================================
+   Cadre de la page de jeu
+   ============================================================ */
 
-.topbar {
+/* Le jeu occupe exactement la zone visible et ne defile jamais. Toute la
+   mise en page se joue a l'interieur de ce cadre : rien ne peut passer sous
+   le clavier puisque le cadre s'arrete ou commence le clavier. */
+.page-game,
+.page-game body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.page-game .app {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    height: var(--app-h);
+    /* Recale le cadre quand Safari fait defiler la fenetre de mise en page
+       pour degager le champ de saisie. */
+    transform: translateY(var(--app-top));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: env(safe-area-inset-top, 0px)
+             env(safe-area-inset-right, 0px)
+             env(safe-area-inset-bottom, 0px)
+             env(safe-area-inset-left, 0px);
+}
+
+/* Les pages de configuration et de scores, elles, defilent normalement :
+   un formulaire long n'a aucune raison d'etre enferme. */
+.page-doc .app {
+    min-height: 100dvh;
+    padding: calc(env(safe-area-inset-top, 0px) + 1rem)
+             calc(env(safe-area-inset-right, 0px) + 0.75rem)
+             calc(env(safe-area-inset-bottom, 0px) + 1.5rem)
+             calc(env(safe-area-inset-left, 0px) + 0.75rem);
+}
+
+/* ------------------------------------------------------------ barre du haut */
+
+/* Dans le flux, et non en position fixed : une barre fixe se decale sur iOS
+   des que le clavier fait defiler la fenetre de mise en page. */
+.topbar {
+    flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
-    /* Les encoches et la barre de geste d'iOS mordent sur les coins. */
-    padding: calc(env(safe-area-inset-top, 0px) + 0.6rem)
-             calc(env(safe-area-inset-right, 0px) + 0.75rem)
-             0.6rem
-             calc(env(safe-area-inset-left, 0px) + 0.75rem);
-    pointer-events: none;
-}
-
-.topbar > *,
-.topbar-right {
-    pointer-events: auto;
+    padding: var(--topbar-pad) 0.6rem;
+    /* Le cadre est en overflow:hidden : sans min-width a zero, un groupe trop
+       large n'est pas rogne par un ascenseur, il est purement coupe. C'est
+       ainsi que le bouton Quitter se retrouvait tranche sur un iPhone SE. */
+    min-width: 0;
 }
 
 .topbar-right {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.3rem;
+    min-width: 0;
 }
 
 .icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    /* 44px est le minimum recommande pour une cible tactile confortable. */
-    min-width: 44px;
-    min-height: 44px;
+    /* Cible tactile : 44 px au repos, jamais sous 32 px dans le cas extreme
+       du telephone couche clavier ouvert. */
+    min-width: var(--touch);
+    min-height: var(--touch);
     padding: 0;
     background: none;
     border: none;
@@ -113,8 +226,8 @@ body {
 }
 
 .icon-btn img {
-    width: 40px;
-    height: 40px;
+    width: var(--icon-size);
+    height: var(--icon-size);
     display: block;
 }
 
@@ -122,8 +235,7 @@ body {
     transform: scale(0.9);
 }
 
-/* Les effets de survol n'ont pas de sens au doigt : ils restent colles apres
-   un tap. On les reserve aux appareils qui ont un vrai pointeur. */
+/* Le survol n'a pas de sens au doigt : l'effet reste colle apres un tap. */
 @media (hover: hover) {
     .icon-btn:hover {
         transform: scale(1.15);
@@ -135,38 +247,39 @@ body {
 
 .text-btn {
     font-family: var(--font-display);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--ink);
     background: var(--panel);
     border: none;
     border-radius: var(--radius);
-    padding: 0.7rem 1.1rem;
-    min-height: 44px;
+    padding: 0 0.9rem;
+    min-height: var(--touch);
     cursor: pointer;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* ------------------------------------------------------------ mise en page */
-
-.app {
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    padding: calc(env(safe-area-inset-top, 0px) + 4.5rem)
-             calc(env(safe-area-inset-right, 0px) + 1rem)
-             calc(env(safe-area-inset-bottom, 0px) + 1rem)
-             calc(env(safe-area-inset-left, 0px) + 1rem);
-}
+/* ------------------------------------------------------------ ecrans */
 
 .screen {
     flex: 1;
+    /* Indispensable : sans min-height a zero, un enfant flex refuse de
+       retrecir sous sa hauteur naturelle et fait deborder le cadre. */
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     gap: var(--gap);
     width: 100%;
     max-width: 720px;
     margin: 0 auto;
+    padding: var(--gap) 1rem;
+    /* Filet de securite : si malgre tout le contenu ne tient pas, il defile
+       ici plutot que de sortir du cadre. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .screen--center {
@@ -182,28 +295,28 @@ body {
 
 .game-title {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 9vw, 3.5rem);
+    font-size: clamp(1.6rem, 8vw, 3.2rem);
     line-height: 1.3;
-    margin: 0 0 2rem;
+    margin: 0 0 var(--gap);
     color: var(--ink);
 }
 
 .mode-summary {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     opacity: 0.75;
-    margin: 1.5rem 0 0;
+    margin: var(--gap) 0 0;
 }
 
 .primary-btn,
 .secondary-btn {
     font-family: var(--font-display);
-    font-size: clamp(1rem, 4.5vw, 1.4rem);
+    font-size: var(--btn-size);
     color: #fff;
     background-color: var(--ink);
     border: none;
     border-radius: var(--radius);
-    padding: 1rem 2rem;
-    min-height: 52px;
+    padding: var(--btn-pad);
+    min-height: var(--touch);
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s;
     -webkit-tap-highlight-color: transparent;
@@ -216,7 +329,7 @@ body {
 }
 
 .primary-btn--compact {
-    padding: 1rem 1.4rem;
+    padding: 0 1.1rem;
     flex: 0 0 auto;
 }
 
@@ -234,31 +347,41 @@ body {
 
 /* ------------------------------------------------------------ diamants */
 
+/* Ancree en haut du cadre, taille naturelle. */
 .score-zone {
+    flex: 0 0 auto;
     width: 100%;
     text-align: center;
 }
 
 .diamonds {
-    /* Dix colonnes fixes : une rangee reste une rangee, quelle que soit la
-       largeur de l'ecran. La v1.7 posait des images de 64px de haut, soit
-       640px de large minimum, ce qui debordait de tout telephone. */
+    /* Dix colonnes fixes : une rangee reste une rangee quelle que soit la
+       largeur. La v1.7 posait des images de 64 px, soit 640 px de large
+       minimum, ce qui debordait de tout telephone. */
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: clamp(2px, 1vw, 6px);
     align-items: center;
     justify-items: center;
     width: 100%;
-    max-width: 620px;
+    max-width: calc(var(--diamond-max) * 12);
     margin: 0 auto;
-    min-height: clamp(30px, 9vw, 64px);
+    min-height: var(--diamond-max);
 }
 
 .diamond {
     width: 100%;
-    max-width: 58px;
+    max-width: var(--diamond-max);
     height: auto;
     display: block;
+}
+
+/* Emplacements encore a gagner. Ils reservent la place de la rangee, ce qui
+   evite que la mise en page sursaute a chaque diamant, et montrent a l'enfant
+   ce qu'il reste a faire au lieu d'une bande vide. */
+.diamond--empty {
+    opacity: 0.28;
+    filter: grayscale(0.85);
 }
 
 .diamond--new {
@@ -273,27 +396,51 @@ body {
 
 .progress {
     font-family: var(--font-display);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     opacity: 0.7;
-    margin: 0.6rem 0 0;
+    margin: 0.4rem 0 0;
+}
+
+/* En mode serre, la ligne de progression est la premiere chose sacrifiee :
+   les diamants disent deja ou en est le joueur. */
+:root[data-compact="2"] .progress {
+    display: none;
 }
 
 /* ------------------------------------------------------------ question */
 
-.question-card {
+/* Occupe tout l'espace laisse libre par le score et le chrono, et centre son
+   contenu dedans. C'est ce qui evite qu'un grand ecran etale trois blocs aux
+   quatre coins avec un vide au milieu, tout en gardant la question a hauteur
+   de regard quand le clavier reduit la zone visible.
+   `min-height: min-content` l'empeche d'etre comprime sous son contenu. */
+.question-area {
+    flex: 1 1 auto;
+    min-height: min-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    padding: var(--gap);
-    border-radius: var(--radius);
     text-align: center;
+}
+
+/* Dimensionnee par son contenu, et non par l'espace disponible : c'est elle
+   qui recoit le flash. Colore sur la zone souple, le retour visuel peignait
+   la moitie de l'ecran en vert. */
+.question-box {
+    display: inline-block;
+    padding: var(--gap) 1rem;
+    border-radius: var(--radius);
 }
 
 /* Retour visuel indispensable : sur un telephone en mode silencieux, le son
    d'erreur ne dit rien a l'enfant. */
-.question-card.is-correct {
+.question-box.is-correct {
     animation: flash-ok 0.5s ease-out;
 }
 
-.question-card.is-wrong {
+.question-box.is-wrong {
     animation: flash-ko 0.5s ease-out;
 }
 
@@ -309,40 +456,40 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
     .diamond--new,
-    .question-card.is-correct,
-    .question-card.is-wrong {
+    .question-box.is-correct,
+    .question-box.is-wrong {
         animation: none;
     }
 }
 
 .question {
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 14vw, 4.5rem);
-    margin: 0 0 1.2rem;
+    font-size: var(--question-size);
+    /* En em : l'ecart au champ suit la taille de la question, donc reste
+       proportionne a tous les niveaux de compacite. */
+    margin: 0 0 0.4em;
     display: flex;
     justify-content: center;
     align-items: baseline;
-    gap: 0.4em;
-    line-height: 1.2;
+    gap: 0.35em;
+    line-height: 1.1;
 }
 
 .answer-form {
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: 0.6rem;
+    gap: 0.5rem;
 }
 
 #answer-input {
     font-family: var(--font-display);
-    /* Sous 16px, Safari iOS zoome automatiquement a la mise au point du champ
-       et ne dezoome jamais. Le clamp ne descend donc jamais plus bas. */
-    font-size: clamp(1.5rem, 8vw, 2.5rem);
+    font-size: var(--input-size);
     text-align: center;
     width: 100%;
-    max-width: 5.5em;
-    min-height: 52px;
-    padding: 0.4rem 0.5rem;
+    max-width: 5em;
+    min-height: var(--touch);
+    padding: 0.3rem 0.4rem;
     color: var(--ink);
     background: rgba(255, 255, 255, 0.55);
     border: none;
@@ -363,15 +510,16 @@ body {
 /* ------------------------------------------------------------ timer */
 
 .timer {
+    flex: 0 0 auto;
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
 }
 
 .timer-track {
     flex: 1;
-    height: 14px;
+    height: 12px;
     background: rgba(255, 255, 255, 0.55);
     border-radius: 999px;
     overflow: hidden;
@@ -382,8 +530,7 @@ body {
     width: 100%;
     background: var(--accent);
     border-radius: 999px;
-    /* Legere transition pour lisser les paliers de 100 ms sans donner
-       l'impression d'un retard sur le compteur. */
+    /* Lisse les paliers de 100 ms sans donner l'impression d'un retard. */
     transition: width 0.1s linear, background-color 0.3s;
 }
 
@@ -393,7 +540,7 @@ body {
 
 .timer-value {
     font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-size: clamp(1rem, 4vw, 1.4rem);
     min-width: 2.2ch;
     text-align: right;
 }
@@ -402,29 +549,29 @@ body {
 
 .victory-title {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 11vw, 3.5rem);
+    font-size: clamp(1.8rem, 10vw, 3.2rem);
     color: var(--accent);
-    margin: 0 0 1.5rem;
+    margin: 0 0 var(--gap);
 }
 
 .victory-stats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.9rem;
+    gap: 0.6rem;
     width: 100%;
     max-width: 420px;
-    margin: 0 0 2rem;
+    margin: 0 0 var(--gap);
     padding: 0;
 }
 
 .victory-stats > div {
     background: var(--panel);
     border-radius: var(--radius);
-    padding: 0.8rem 0.5rem;
+    padding: 0.6rem 0.5rem;
 }
 
 .victory-stats dt {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     opacity: 0.65;
@@ -432,21 +579,21 @@ body {
 
 .victory-stats dd {
     font-family: var(--font-display);
-    font-size: 1.5rem;
-    margin: 0.3rem 0 0;
+    font-size: 1.3rem;
+    margin: 0.25rem 0 0;
     color: var(--accent);
 }
 
 .victory-stats dd.victory-mode {
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--ink);
 }
 
 .victory-actions {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.6rem;
     width: 100%;
     max-width: 320px;
 }
@@ -496,14 +643,14 @@ body {
 
 .page-title {
     font-family: var(--font-display);
-    font-size: clamp(1.2rem, 6vw, 2rem);
+    font-size: clamp(1.1rem, 5.5vw, 1.9rem);
     text-align: center;
     margin: 0 0 1.5rem;
 }
 
 .section-title {
     font-family: var(--font-display);
-    font-size: clamp(0.85rem, 4vw, 1.1rem);
+    font-size: clamp(0.8rem, 3.8vw, 1.05rem);
     margin: 0 0 0.9rem;
     padding-bottom: 0.4rem;
     border-bottom: 2px solid var(--accent);
@@ -514,7 +661,7 @@ body {
 }
 
 /* Chaque option est une pastille cliquable de bonne taille : au doigt, un
-   simple radio de 20px est bien trop petit pour etre vise correctement. */
+   simple radio de 20 px est trop petit pour etre vise correctement. */
 .option-list {
     display: flex;
     flex-direction: column;
@@ -558,18 +705,33 @@ body {
     cursor: pointer;
 }
 
-.option--table {
+.option--table,
+.option--name {
     justify-content: center;
-    /* Cinq colonnes par rangee sur telephone, sans jamais descendre sous
-       une cible de 48px. */
-    flex: 1 1 calc(20% - 0.5rem);
-    min-width: 64px;
     font-family: var(--font-display);
+    text-align: center;
+}
+
+/* Un seul chiffre : cinq par rangee, sans descendre sous une cible de 48 px. */
+.option--table {
+    flex: 1 1 calc(20% - 0.5rem);
+    min-width: 60px;
+}
+
+/* Un prenom demande bien plus de place qu'un chiffre. Ces pastilles ont
+   longtemps partage le gabarit des tables, et « Emilie », « Louane » et
+   « Arthur » se chevauchaient en debordant de leur cadre. */
+.option--name {
+    flex: 1 1 calc(33.333% - 0.5rem);
+    min-width: 92px;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
 }
 
 /* La case elle-meme est masquee (la pastille entiere sert de cible), mais on
    la garde dans le flux pour qu'elle reste atteignable au clavier. */
-.option--table input {
+.option--table input,
+.option--name input {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -613,6 +775,7 @@ body {
     padding: 1rem 1.5rem;
     min-height: 52px;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ------------------------------------------------------------ scores */
@@ -637,7 +800,7 @@ body {
 }
 
 /* Sur telephone, chaque score est une carte empilee. La v1.7 utilisait une
-   grille de six colonnes dans un conteneur de 1000px minimum. */
+   grille de six colonnes dans un conteneur de 1000 px minimum. */
 .score {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -666,20 +829,23 @@ body {
 .score-player {
     grid-area: player;
     font-weight: 700;
+    /* Un nom long ne doit pas elargir la carte au-dela de l'ecran. */
+    overflow-wrap: anywhere;
 }
 
 .score-time {
     grid-area: time;
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--accent);
 }
 
 .score-meta {
     grid-area: meta;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     opacity: 0.72;
     line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .empty {
@@ -726,26 +892,12 @@ body {
     }
 }
 
-/* Telephone couche : la hauteur devient la ressource rare, on comprime la
-   verticale plutot que de laisser la question sortir de l'ecran. */
-@media (orientation: landscape) and (max-height: 500px) {
-    .app {
-        padding-top: 3.5rem;
-    }
-    .question {
-        font-size: clamp(1.6rem, 7vh, 2.6rem);
-        margin-bottom: 0.6rem;
-    }
-    .question-card {
-        padding: 0.4rem;
-    }
-    .diamond {
-        max-width: 34px;
-    }
-    .game-title {
-        margin-bottom: 1rem;
-    }
-    .progress {
-        display: none;
+/* Telephone couche. La pile verticale suffit : les niveaux de compacite ont
+   deja reduit les tailles, et tout tient largement dans la hauteur. Une mise
+   en colonnes avait ete essayee ici, elle repoussait la question dans un coin
+   en laissant la moitie gauche vide. */
+@media (orientation: landscape) and (max-height: 520px) {
+    .screen {
+        padding: var(--gap) 0.75rem;
     }
 }
