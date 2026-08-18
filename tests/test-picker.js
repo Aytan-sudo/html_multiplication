@@ -2,10 +2,13 @@
 const fs = require('fs');
 const path = require('path').join(__dirname, '..', 'js', 'questions.js');
 const store = {};
-global.Storage = {
+// Le module s'appelle GameStorage depuis la v2 : le harnais etait reste sur
+// l'ancien nom `Storage` et le test plantait au demarrage.
+global.GameStorage = {
   getJSON: (k, f) => (k in store ? JSON.parse(store[k]) : f),
   setJSON: (k, v) => { store[k] = JSON.stringify(v); return true; }
 };
+global.playerLabel = c => c.playerName || 'Anonyme';
 eval(fs.readFileSync(path, 'utf8') + '\nglobal.QuestionPicker = QuestionPicker; global.expectedResult = expectedResult;');
 
 const config = {

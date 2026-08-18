@@ -728,6 +728,11 @@ body {
     font-size: 0.85rem;
 }
 
+/* Le choix par defaut, plus long que les prenoms, occupe sa propre rangee. */
+.option--anon {
+    flex: 1 1 100%;
+}
+
 /* La case elle-meme est masquee (la pastille entiere sert de cible), mais on
    la garde dans le flux pour qu'elle reste atteignable au clavier. */
 .option--table input,

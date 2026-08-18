@@ -48,7 +48,11 @@ const check = (label, cond, detail = '') => {
     w.document.dispatchEvent(new w.Event('DOMContentLoaded'));
 
     const c = w.__t.gameConfig;
-    check('le joueur est repris', c.playerName === 'Louane', `-> ${c.playerName}`);
+    // Le prenom, lui, repart a zero : dans les versions precedentes il valait
+    // « Emilie » par defaut, sans que personne l'ait choisi. Impossible de
+    // distinguer un vrai choix d'un reste de valeur par defaut, on repart donc
+    // en anonyme partout.
+    check('le joueur repart en anonyme', c.playerName === '', `-> ${c.playerName}`);
     check("l'operation est reprise", c.operation === 'addition');
     check('la difficulte est reprise', c.difficulty === 'easy');
     check('le timer est repris', c.timerDuration === 30);
@@ -103,7 +107,8 @@ const check = (label, cond, detail = '') => {
     const wrote = w3.__t.store.set('essai', 'valeur');
     check('le stockage bascule sur les cookies sans planter', wrote === true);
     check('la valeur est relisible', w3.__t.store.get('essai') === 'valeur');
-    check('le jeu demarre malgre tout', w3.__t.gameConfig.playerName === 'Emilie');
+    check('le jeu demarre malgre tout', w3.__t.gameConfig.operation === 'multiplication');
+    check('aucun joueur par defaut : partie anonyme', w3.__t.gameConfig.playerName === '');
 
     console.log('\n===============================');
     console.log(`  ${pass} tests reussis, ${fail} echecs`);

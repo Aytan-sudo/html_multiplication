@@ -57,31 +57,24 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 (async () => {
     console.log('\n--- Page de configuration : construction ---');
     let { window: w, alerts, navigations } = await boot('config.html', ['js/config-page.js']);
-    check('6 joueurs proposes', $(w, 'player-options').children.length === 6,
+    check('Anonyme + 6 joueurs proposes', $(w, 'player-options').children.length === 7,
           `-> ${$(w, 'player-options').children.length}`);
     check('8 tables proposees (2 a 9)', $(w, 'table-options').children.length === 8);
     check('4 couleurs proposees', $(w, 'color-options').children.length === 4);
-    check('Emilie est preselectionnee',
-          w.document.querySelector('input[name="player"]:checked').value === 'Emilie');
+    check('Anonyme est preselectionne',
+          w.document.querySelector('input[name="player"]:checked').value === '');
     check('multiplication preselectionnee',
           w.document.querySelector('input[name="operation"]:checked').value === 'multiplication');
     check('timer 15 s preselectionne',
           w.document.querySelector('input[name="timer"]:checked').value === '15');
     check('entrainement cible actif par defaut', $(w, 'adaptive').checked === true);
-    check('tables 2 a 5 cochees par defaut',
-          ['2', '3', '4', '5'].every(v =>
+    check('toutes les tables cochees par defaut',
+          ['2', '3', '4', '5', '6', '7', '8', '9'].every(v =>
               w.document.querySelector(`input[name="tables"][value="${v}"]`).checked));
-    check('tables 6 a 9 decochees par defaut',
-          ['6', '7', '8', '9'].every(v =>
-              !w.document.querySelector(`input[name="tables"][value="${v}"]`).checked));
 
     console.log('\n--- Case "Toutes les tables" ---');
-    check("l'etat est intermediaire au depart", $(w, 'all-tables').indeterminate === true);
-    $(w, 'all-tables').checked = true;
-    change(w, $(w, 'all-tables'));
-    check('toutes les tables sont cochees',
-          Array.from(w.document.querySelectorAll('input[name="tables"]')).every(cb => cb.checked));
-    check("la case n'est plus intermediaire", $(w, 'all-tables').indeterminate === false);
+    check('la case globale est cochee au depart', $(w, 'all-tables').checked === true);
+    check("l'etat n'est pas intermediaire", $(w, 'all-tables').indeterminate === false);
     const one = w.document.querySelector('input[name="tables"][value="7"]');
     one.checked = false;
     change(w, one);
@@ -107,6 +100,27 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     check('redirection vers le jeu', navigations.length === 1, `-> ${navigations.length}`);
     check('aucune alerte', alerts.length === 0, `-> ${alerts}`);
 
+    console.log('\n--- Retour a l anonymat ---');
+    ({ window: w } = await boot('config.html', ['js/config-page.js'],
+        { gameConfig: { playerName: 'Arthur', operation: 'multiplication', timerDuration: 15,
+                        selectedNumbers: [0, 1, 2, 10], difficulty: 'hard', bgColor: '#f8c3d3',
+                        adaptive: true, soundEnabled: true, configVersion: 2 } }));
+    check('le prenom enregistre est relu',
+          w.document.querySelector('input[name="player"]:checked').value === 'Arthur');
+    w.document.querySelector('input[name="player"][value=""]').checked = true;
+    $(w, 'config-form').dispatchEvent(new w.Event('submit', { cancelable: true }));
+    check('on peut redevenir anonyme',
+          JSON.parse(w.localStorage.getItem('gameConfig')).playerName === '');
+
+    console.log('\n--- Un prenom herite d une ancienne version ne colle pas ---');
+    ({ window: w } = await boot('config.html', ['js/config-page.js'],
+        // Config d'avant la 2.2 : « Emilie » y etait la valeur par defaut.
+        { gameConfig: { playerName: 'Emilie', operation: 'multiplication', timerDuration: 15,
+                        selectedNumbers: [0, 1, 2, 10], difficulty: 'hard', bgColor: '#f8c3d3',
+                        adaptive: true, soundEnabled: true } }));
+    check('la mise a jour repart en anonyme',
+          w.document.querySelector('input[name="player"]:checked').value === '');
+
     console.log('\n--- Refus si aucune table entre 2 et 9 ---');
     ({ window: w, alerts, navigations } = await boot('config.html', ['js/config-page.js']));
     w.document.querySelectorAll('input[name="tables"]').forEach(cb => { cb.checked = false; });
@@ -118,15 +132,16 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     ({ window: w } = await boot('config.html', ['js/config-page.js'],
         { gameConfig: { playerName: 'Flora', operation: 'addition', timerDuration: 30,
                         selectedNumbers: [0, 1, 9, 10], difficulty: 'easy', bgColor: '#b3d9ff',
-                        adaptive: false, soundEnabled: true } }));
+                        adaptive: false, soundEnabled: true, configVersion: 2 } }));
     check('la config enregistree est relue',
           w.document.querySelector('input[name="player"]:checked').value === 'Flora');
     check('la couleur enregistree est relue',
           w.document.querySelector('input[name="bgcolor"]:checked').value === '#b3d9ff');
     check('entrainement cible desactive relu', $(w, 'adaptive').checked === false);
     $(w, 'reset-button').click();
-    check('retour a Emilie',
-          w.document.querySelector('input[name="player"]:checked').value === 'Emilie');
+    check('retour a Anonyme',
+          w.document.querySelector('input[name="player"]:checked').value === '');
+    check('retour a toutes les tables', $(w, 'all-tables').checked === true);
     check('retour au rose',
           w.document.querySelector('input[name="bgcolor"]:checked').value === '#f8c3d3');
 
@@ -136,12 +151,15 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
         // des clefs ajoutees depuis.
         { gameConfig: { playerNames: ['Louane', 'Arthur'], operation: 'multiplication',
                         selectedNumbers: [0, 1, 2, 10], difficulty: 'hard', timerDuration: 20 } }));
-    check('playerNames converti en playerName',
-          w.document.querySelector('input[name="player"]:checked').value === 'Louane');
+    check('la liste de joueurs de la v1.3 laisse place a l anonymat',
+          w.document.querySelector('input[name="player"]:checked').value === '');
     check('les clefs manquantes prennent la valeur par defaut',
           $(w, 'adaptive').checked === true);
     check('la couleur par defaut est appliquee',
           w.document.querySelector('input[name="bgcolor"]:checked').value === '#f8c3d3');
+    $(w, 'config-form').dispatchEvent(new w.Event('submit', { cancelable: true }));
+    check('la clef playerNames obsolete est retiree',
+          !('playerNames' in JSON.parse(w.localStorage.getItem('gameConfig'))));
 
     console.log('\n--- Page des scores ---');
     const scores = [

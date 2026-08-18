@@ -7,12 +7,17 @@
 const ALWAYS_INCLUDED = [0, 1, 10];
 const SELECTABLE_TABLES = [2, 3, 4, 5, 6, 7, 8, 9];
 
+// Anonyme est une option a part entiere, en tete de liste : c'est le choix par
+// defaut, et il doit rester possible d'y revenir.
 function buildPlayerOptions() {
     const container = document.getElementById('player-options');
-    container.replaceChildren(...PLAYERS.map(name => {
+    const names = [{ value: '', label: ANONYMOUS }, ...PLAYERS.map(n => ({ value: n, label: n }))];
+    container.replaceChildren(...names.map(({ value, label: text }) => {
         const label = document.createElement('label');
-        label.className = 'option option--name';
-        label.innerHTML = `<input type="radio" name="player" value="${name}"><span>${name}</span>`;
+        // « Anonyme » prend la rangee entiere : au gabarit d'un prenom, le mot
+        // debordait de sa pastille sur un petit ecran.
+        label.className = value ? 'option option--name' : 'option option--name option--anon';
+        label.innerHTML = `<input type="radio" name="player" value="${value}"><span>${text}</span>`;
         return label;
     }));
 }
@@ -68,7 +73,7 @@ function readForm() {
         operation: document.querySelector('input[name="operation"]:checked').value,
         difficulty: document.querySelector('input[name="difficulty"]:checked').value,
         timerDuration: Number(document.querySelector('input[name="timer"]:checked').value),
-        playerName: document.querySelector('input[name="player"]:checked').value,
+        playerName: (document.querySelector('input[name="player"]:checked') || {}).value || '',
         bgColor: document.querySelector('input[name="bgcolor"]:checked').value,
         adaptive: document.getElementById('adaptive').checked,
         selectedNumbers: [...new Set([...ALWAYS_INCLUDED, ...tables])].sort((a, b) => a - b)

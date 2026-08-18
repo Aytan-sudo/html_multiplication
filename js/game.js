@@ -279,7 +279,7 @@ function saveVictory(totalSeconds) {
         // main, ce qui ne matchait jamais. Un identifiant unique regle le sujet.
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         date: new Date().toISOString(),
-        players: gameConfig.playerName,
+        players: playerLabel(gameConfig),
         time: totalSeconds,
         mistakes: state.mistakeCount,
         operation: gameConfig.operation,
@@ -327,7 +327,11 @@ function onVictory() {
 function describeMode() {
     const op = gameConfig.operation === 'addition' ? 'Additions' : 'Multiplications';
     const tables = gameConfig.selectedNumbers.filter(n => n > 1 && n < 10);
-    const tablesText = tables.length ? `tables ${tables.join(', ')}` : 'tables faciles';
+    // Enumerer les huit tables tient sur deux lignes sur un telephone : quand
+    // elles y sont toutes, une formule courte suffit.
+    const tablesText = tables.length === 8 ? 'toutes les tables'
+        : tables.length ? `tables ${tables.join(', ')}`
+        : 'tables faciles';
     return `${op} - ${tablesText} - ${gameConfig.timerDuration}s`;
 }
 
@@ -361,7 +365,11 @@ document.addEventListener('DOMContentLoaded', () => {
         homeBtn: document.getElementById('home-btn')
     });
 
-    el.startBtn.textContent = `C'est parti, ${gameConfig.playerName} !`;
+    // Sans prenom choisi, le bouton ne s'adresse a personne en particulier :
+    // c'est le cas par defaut, la tablette passant de main en main.
+    el.startBtn.textContent = gameConfig.playerName
+        ? `C'est parti, ${gameConfig.playerName} !`
+        : "C'est parti !";
     el.modeSummary.textContent = describeMode();
     applyMute();
 

@@ -77,6 +77,18 @@
 
 ---
 
+## Version 2.2 &mdash; joueur anonyme par defaut ✅ FAIT
+
+- [x] Plus de joueur preselectionne : le jeu saluait « Emilie » au demarrage et
+      enregistrait le score et les statistiques a son nom, quel que soit
+      l'enfant qui jouait
+- [x] Partie anonyme par defaut, prenom facultatif dans la configuration
+- [x] Toutes les tables cochees par defaut
+- [x] Resume « toutes les tables » sur l'ecran titre
+- [x] `test-picker.js` repare (il cherchait `Storage`, renomme `GameStorage`)
+
+---
+
 ## Pistes pour la suite
 
 ### Page de statistiques

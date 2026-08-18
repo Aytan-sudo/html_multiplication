@@ -32,7 +32,7 @@ function saveStats(playerName, operation, stats) {
 class QuestionPicker {
     constructor(config) {
         this.config = config;
-        this.stats = loadStats(config.playerName, config.operation);
+        this.stats = loadStats(playerLabel(config), config.operation);
         this.lastKey = null;
         this.facts = this.buildFacts();
     }
@@ -114,7 +114,7 @@ class QuestionPicker {
             stat.ko++;
         }
         this.stats[fact.key] = stat;
-        saveStats(this.config.playerName, this.config.operation, this.stats);
+        saveStats(playerLabel(this.config), this.config.operation, this.stats);
     }
 }
 

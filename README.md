@@ -14,10 +14,13 @@ reponse ajoute un diamant, une erreur en fait perdre. Trois rangees de dix
 diamants et c'est gagne.
 
 - **Operations** : multiplication ou addition
-- **Tables** : selection libre de 2 a 9 (0, 1 et 10 toujours presentes)
+- **Tables** : selection libre de 2 a 9, toutes cochees par defaut (0, 1 et 10
+  toujours presentes)
 - **Timer** : 15, 20 ou 30 secondes par question
 - **Difficulte** : facile (on perd la rangee en cours) ou difficile (retour a zero)
-- **Six joueurs** : Emilie, Louane, Arthur, Flora, Papa, Maman
+- **Joueur** : anonyme par defaut ; on peut choisir un prenom dans la
+  configuration (Emilie, Louane, Arthur, Flora, Papa, Maman) pour retrouver ses
+  scores et son entrainement cible
 - **Meilleurs scores** classes par temps, avec filtres
 
 ## Installation sur telephone
@@ -182,7 +185,20 @@ et sans historique de scores.
 
 ## Historique des versions
 
-### Version 2.1 (actuelle)
+### Version 2.2 (actuelle)
+
+- Plus de joueur preselectionne : la partie est anonyme tant qu'aucun prenom
+  n'est choisi dans la configuration. Le jeu saluait « Emilie » au demarrage et
+  lui attribuait le score de qui prenait la tablette.
+- Reinitialisation unique du prenom au premier lancement de la 2.2 : la valeur
+  enregistree venait de l'ancien defaut, pas d'un choix. Le reste de la
+  configuration (tables, timer, couleur) est conserve.
+- Toutes les tables sont cochees par defaut
+- L'ecran titre resume « toutes les tables » au lieu de les enumerer
+- Le harnais de `test-picker.js` repare : il cherchait encore `Storage`, renomme
+  `GameStorage` en v2, et le test plantait au demarrage
+
+### Version 2.1
 
 - Le clavier virtuel ne recouvre plus le jeu, sur iOS comme sur Android
 - Quatre niveaux de compacite selon la hauteur reellement disponible

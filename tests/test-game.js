@@ -12,7 +12,7 @@ function check(label, condition, detail = '') {
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-async function boot() {
+async function boot(seedConfig) {
     const dom = new JSDOM(read('index.html'), {
         url: 'https://example.test/',
         runScripts: 'outside-only',
@@ -37,6 +37,9 @@ async function boot() {
     };
     window.confetti = () => {};
     window.localStorage.clear();
+    // Certains tests ont besoin d'une config deja enregistree : elle doit etre
+    // en place avant que config.js ne la relise.
+    if (seedConfig) window.localStorage.setItem('gameConfig', JSON.stringify(seedConfig));
 
     // Les declarations `const` d'un eval indirect sont jetees des la fin de
     // l'eval. On concatene donc les scripts en un seul bloc, comme le fait le
@@ -81,8 +84,10 @@ function answerWrongly(w) {
     let { window: w, played } = await boot();
     check("l'ecran titre est affiche", !$(w, 'screen-title').hidden);
     check("l'ecran de jeu est masque", $(w, 'screen-game').hidden);
-    check('le bouton porte le nom du joueur', $(w, 'start-btn').textContent.includes('Emilie'),
+    check('le bouton ne cite personne par defaut',
+          !/Emilie|Louane|Arthur|Flora|Papa|Maman/.test($(w, 'start-btn').textContent),
           `-> "${$(w, 'start-btn').textContent}"`);
+    check('aucun joueur par defaut dans la config', w.__t.gameConfig.playerName === '');
     check('le resume du mode est rempli', $(w, 'mode-summary').textContent.length > 0,
           `-> "${$(w, 'mode-summary').textContent}"`);
     check('aucune musique telechargee avant de jouer', w.__t.sounds.theme === null);
@@ -190,7 +195,8 @@ function answerWrongly(w) {
     check('un score est enregistre', scores.length === 1);
     check('dans localStorage, pas dans un cookie', !w.document.cookie.includes('highscores'));
     check('le score a un identifiant unique', typeof scores[0].id === 'string' && scores[0].id.length > 5);
-    check('le joueur est correct', scores[0].players === 'Emilie');
+    check('le score est enregistre au nom d Anonyme', scores[0].players === 'Anonyme',
+          `-> ${scores[0].players}`);
     check('les erreurs sont enregistrees', scores[0].mistakes === 0);
 
     console.log('\n--- Rang correct avec des temps identiques ---');
@@ -239,6 +245,23 @@ function answerWrongly(w) {
     check('un champ vide ne valide rien', w.__t.state.fact.key === factBefore);
     check('aucune penalite sur champ vide',
           w.__t.state.diamonds === 0 && w.__t.state.mistakeCount === 0);
+
+    console.log('\n--- Prenom herite d une version anterieure a la 2.2 ---');
+    ({ window: w } = await boot({ playerName: 'Emilie' }));
+    check('le prenom impose par l ancien defaut est oublie',
+          w.__t.gameConfig.playerName === '', `-> ${w.__t.gameConfig.playerName}`);
+
+    console.log('\n--- Prenom choisi dans les reglages ---');
+    ({ window: w } = await boot({ playerName: 'Louane', configVersion: 2 }));
+    check("l'ecran titre salue le joueur", $(w, 'start-btn').textContent.includes('Louane'),
+          `-> "${$(w, 'start-btn').textContent}"`);
+    $(w, 'start-btn').click();
+    for (let i = 0; i < 30; i++) answerCorrectly(w);
+    check('le score porte son prenom',
+          JSON.parse(w.localStorage.getItem('highscores'))[0].players === 'Louane');
+    check('les statistiques sont rangees sous son prenom',
+          Object.keys(w.localStorage).some(k => k.startsWith('stats:Louane:')),
+          `-> ${Object.keys(w.localStorage).filter(k => k.startsWith('stats:'))}`);
 
     console.log('\n--- Mode addition ---');
     ({ window: w } = await boot());
