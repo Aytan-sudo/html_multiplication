@@ -185,7 +185,17 @@ et sans historique de scores.
 
 ## Historique des versions
 
-### Version 2.3 (actuelle)
+### Version 2.4 (actuelle)
+
+- Les configurations enregistrees par une version <= 2.1 passent a « toutes les
+  tables ». Le nouveau defaut existait depuis la 2.2, mais la selection deja
+  stockee (tables 2 a 5) le recouvrait a chaque chargement.
+- Une selection differente de l'ancien defaut est un choix delibere : elle est
+  conservee telle quelle.
+- Les migrations sont desormais appliquees par palier, selon le numero de format
+  d'origine, pour qu'une nouvelle migration ne rejoue pas les precedentes.
+
+### Version 2.3
 
 - Le numero de version est affiche en bas de la page de configuration. Il est
   lu depuis le code reellement charge : si le service worker sert encore un

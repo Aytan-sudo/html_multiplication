@@ -77,6 +77,17 @@
 
 ---
 
+## Version 2.4 &mdash; toutes les tables par defaut, pour de bon ✅ FAIT
+
+- [x] Une config d'avant la 2.2 gardait les tables 2 a 5 : le defaut « toutes les
+      tables » de la 2.2 etait recouvert par la valeur deja enregistree
+- [x] Migration par palier (configVersion 3) qui remplace l'ancien defaut exact
+- [x] Une selection deliberee reste intacte
+- [x] Les paliers ne se rejouent plus entre eux : ajouter le palier 3 ne devait
+      pas effacer un prenom choisi en 2.2
+
+---
+
 ## Version 2.3 &mdash; numero de version visible ✅ FAIT
 
 - [x] Version affichee en bas de la page de configuration, pour savoir quelle

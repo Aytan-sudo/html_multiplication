@@ -251,6 +251,23 @@ function answerWrongly(w) {
     check('le prenom impose par l ancien defaut est oublie',
           w.__t.gameConfig.playerName === '', `-> ${w.__t.gameConfig.playerName}`);
 
+    console.log('\n--- Tables heritees d une version anterieure a la 2.4 ---');
+    ({ window: w } = await boot({ selectedNumbers: [0, 1, 2, 3, 4, 5] }));
+    check('l ancien defaut 2-5 passe a toutes les tables',
+          w.__t.gameConfig.selectedNumbers.join() === '0,1,2,3,4,5,6,7,8,9,10',
+          `-> ${w.__t.gameConfig.selectedNumbers.join()}`);
+
+    ({ window: w } = await boot({ selectedNumbers: [0, 1, 7, 10], configVersion: 2 }));
+    check('une selection deliberee est conservee',
+          w.__t.gameConfig.selectedNumbers.join() === '0,1,7,10',
+          `-> ${w.__t.gameConfig.selectedNumbers.join()}`);
+
+    // Le piege d'une migration par paliers : ajouter le palier 3 ne doit pas
+    // rejouer le palier 2 et effacer un prenom choisi depuis.
+    ({ window: w } = await boot({ playerName: 'Arthur', configVersion: 2 }));
+    check('le palier 3 ne rejoue pas la remise a zero du prenom',
+          w.__t.gameConfig.playerName === 'Arthur', `-> ${w.__t.gameConfig.playerName}`);
+
     console.log('\n--- Prenom choisi dans les reglages ---');
     ({ window: w } = await boot({ playerName: 'Louane', configVersion: 2 }));
     check("l'ecran titre salue le joueur", $(w, 'start-btn').textContent.includes('Louane'),

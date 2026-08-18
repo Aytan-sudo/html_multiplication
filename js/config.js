@@ -6,7 +6,7 @@
 //
 // Elle doit rester alignee avec « version » dans package.json et avec CACHE
 // dans sw.js ; test-pages.js echoue si les trois divergent.
-const APP_VERSION = '2.3.0';
+const APP_VERSION = '2.4.0';
 
 const DEFAULT_CONFIG = {
     operation: 'multiplication',   // 'addition' ou 'multiplication'
@@ -24,7 +24,7 @@ const DEFAULT_CONFIG = {
     bgColor: '#f8c3d3',
     adaptive: true,                // tirage pondere par les erreurs passees
     soundEnabled: true,
-    configVersion: 2               // voir CONFIG_VERSION plus bas
+    configVersion: 3               // voir CONFIG_VERSION plus bas
 };
 
 const PLAYERS = ['Emilie', 'Louane', 'Arthur', 'Flora', 'Papa', 'Maman'];
@@ -48,7 +48,13 @@ const CONFIG_KEY = 'gameConfig';
 
 // Numero de format de la config enregistree. Il ne change que lorsqu'une valeur
 // deja stockee doit etre reinterpretee au chargement.
-const CONFIG_VERSION = 2;
+const CONFIG_VERSION = 3;
+
+// Selection de tables des versions <= 2.1. Une config qui porte exactement
+// cette liste n'a jamais vu l'ecran de configuration : c'est l'ancien defaut
+// tel quel, et non un choix. La reconnaitre permet de la remplacer par le
+// nouveau defaut sans effacer les selections voulues.
+const LEGACY_TABLES = [0, 1, 2, 3, 4, 5];
 
 function loadConfig() {
     const saved = GameStorage.getJSON(CONFIG_KEY, null);
@@ -65,14 +71,28 @@ function loadConfig() {
     // ancienne version n'a pas les clefs ajoutees depuis.
     const config = { ...DEFAULT_CONFIG, ...saved };
 
-    // Config ecrite avant la 2.2 : son playerName vaut « Emilie » par simple
-    // effet de l'ancienne valeur par defaut, et non parce que quelqu'un l'a
-    // choisi. On repart donc en anonyme ; le prenom se choisit desormais dans
-    // la configuration.
-    if (saved.configVersion !== CONFIG_VERSION) {
+    // Migrations par palier. Chacune est conditionnee au numero d'origine et non
+    // a l'ecart avec la version courante : sans cela, ajouter une migration
+    // rejouerait toutes les precedentes et effacerait des choix faits depuis.
+    const from = Number(saved.configVersion) || 1;
+
+    // Palier 2 : le playerName d'une config anterieure a la 2.2 vaut « Emilie »
+    // par simple effet de l'ancienne valeur par defaut, et non parce que
+    // quelqu'un l'a choisi. On repart en anonyme.
+    if (from < 2) {
         config.playerName = '';
-        config.configVersion = CONFIG_VERSION;
     }
+
+    // Palier 3 : les versions <= 2.1 ne proposaient que les tables de 2 a 5 par
+    // defaut. Une config restee sur cette liste exacte n'a jamais ete modifiee ;
+    // elle passe au nouveau defaut, toutes les tables. Une selection differente
+    // est un choix delibere et n'est pas touchee.
+    if (from < 3 && Array.isArray(saved.selectedNumbers)
+        && [...saved.selectedNumbers].sort((a, b) => a - b).join() === LEGACY_TABLES.join()) {
+        config.selectedNumbers = [...DEFAULT_CONFIG.selectedNumbers];
+    }
+
+    config.configVersion = CONFIG_VERSION;
 
     if (!PLAYERS.includes(config.playerName)) {
         config.playerName = '';
