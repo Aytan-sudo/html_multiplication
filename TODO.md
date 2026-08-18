@@ -77,6 +77,16 @@
 
 ---
 
+## Version 2.3 &mdash; numero de version visible ✅ FAIT
+
+- [x] Version affichee en bas de la page de configuration, pour savoir quelle
+      version tourne vraiment sur l'appareil
+- [x] Numero lu depuis le code charge : un cache perime affiche l'ancien numero
+      au lieu de mentir sur la version en place
+- [x] Test qui echoue si package.json, sw.js et APP_VERSION divergent
+
+---
+
 ## Version 2.2 &mdash; joueur anonyme par defaut ✅ FAIT
 
 - [x] Plus de joueur preselectionne : le jeu saluait « Emilie » au demarrage et

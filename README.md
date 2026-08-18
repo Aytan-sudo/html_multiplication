@@ -185,7 +185,14 @@ et sans historique de scores.
 
 ## Historique des versions
 
-### Version 2.2 (actuelle)
+### Version 2.3 (actuelle)
+
+- Le numero de version est affiche en bas de la page de configuration. Il est
+  lu depuis le code reellement charge : si le service worker sert encore un
+  ancien cache, c'est l'ancien numero qui s'affiche, ce qui permet de voir d'un
+  coup d'oeil si la mise a jour est bien arrivee sur l'appareil.
+
+### Version 2.2
 
 - Plus de joueur preselectionne : la partie est anonyme tant qu'aucun prenom
   n'est choisi dans la configuration. Le jeu saluait « Emilie » au demarrage et

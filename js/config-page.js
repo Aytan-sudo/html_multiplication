@@ -89,6 +89,10 @@ function syncAllTablesCheckbox() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Ecrit depuis le JS plutot qu'en dur dans la page : le numero n'a ainsi
+    // qu'une seule declaration a maintenir.
+    document.getElementById('app-version').textContent = APP_VERSION;
+
     buildPlayerOptions();
     buildTableOptions();
     buildColorOptions();

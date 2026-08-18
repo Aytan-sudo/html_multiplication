@@ -1,5 +1,13 @@
 // Configuration du jeu : valeurs par defaut, chargement, validation.
 
+// Version affichee dans les reglages. Elle est lue depuis le code reellement
+// charge : si le service worker sert encore un ancien cache, c'est bien
+// l'ancien numero qui s'affiche, et c'est l'information utile.
+//
+// Elle doit rester alignee avec « version » dans package.json et avec CACHE
+// dans sw.js ; test-pages.js echoue si les trois divergent.
+const APP_VERSION = '2.3.0';
+
 const DEFAULT_CONFIG = {
     operation: 'multiplication',   // 'addition' ou 'multiplication'
     selectedNumbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // tables revisees (second operande)

@@ -770,6 +770,15 @@ body {
     margin-top: 2rem;
 }
 
+/* Discret : on vient ici pour regler le jeu, pas pour lire un numero. Il sert
+   a verifier d'un coup d'oeil quelle version tourne vraiment. */
+.app-version {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
 .danger-btn {
     font-family: var(--font-display);
     font-size: clamp(1rem, 4.5vw, 1.2rem);

@@ -223,6 +223,26 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     check('le contenu est bien le texte litteral',
           player.textContent === '<img src=x onerror=alert(1)>');
 
+    console.log('\n--- Numero de version ---');
+    ({ window: w } = await boot('config.html', ['js/config-page.js']));
+    const shown = $(w, 'app-version').textContent;
+
+    // APP_VERSION est un const : sa liaison reste dans la portee de l'eval qui a
+    // charge les scripts et n'est pas relisible depuis window. On relit donc la
+    // declaration dans la source, comme pour les deux autres.
+    const declared = (read('js/config.js').match(/const APP_VERSION = '([\d.]+)'/) || [])[1];
+    check('la version est affichee dans les reglages', shown === declared, `(${shown})`);
+
+    // Le numero est ecrit a trois endroits qu'aucun outil ne synchronise :
+    // package.json pour le projet, sw.js pour invalider le cache hors ligne, et
+    // APP_VERSION pour l'affichage. Les laisser diverger afficherait a l'ecran
+    // une version qui n'est pas celle qui tourne, soit exactement ce que ce
+    // numero est cense eviter.
+    const inPackage = JSON.parse(read('package.json')).version;
+    const inSw = (read('sw.js').match(/const CACHE = 'multiplication-v([\d.]+)'/) || [])[1];
+    check('APP_VERSION == package.json', declared === inPackage, `(${declared} vs ${inPackage})`);
+    check('APP_VERSION == cache du service worker', declared === inSw, `(${declared} vs ${inSw})`);
+
     console.log('\n===============================');
     console.log(`  ${pass} tests reussis, ${fail} echecs`);
     console.log('===============================');
