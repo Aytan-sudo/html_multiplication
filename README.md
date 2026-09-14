@@ -2,10 +2,16 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 2.6.0** &mdash; jouable en ligne, telephone compris :
+**Version 2.6.1** &mdash; jouable en ligne, telephone compris :
 **https://aytan-sudo.github.io/html_multiplication/**
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
+
+## Version 2.6.1 — Passeport 1.3.0
+
+Module commun du passeport 1.3.0 : les profils peuvent choisir un style sobre
+et se passer d'objectif hebdomadaire. Rien ne change dans le jeu ; le numéro de
+cache suit pour que les appareils reçoivent ce module.
 
 ## Version 2.6.0 — Une victoire, un tampon
 

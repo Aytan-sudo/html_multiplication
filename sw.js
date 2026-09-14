@@ -3,7 +3,7 @@
 // est mauvais.
 //
 // Changer ce numero de version force le remplacement de tout l'ancien cache.
-const CACHE = 'multiplication-v2.6.0';
+const CACHE = 'multiplication-v2.6.1';
 
 // La musique n'est pas prechargee : 1,5 Mo imposes a quelqu'un qui ouvre juste
 // la page serait exactement le probleme qu'on cherche a corriger. Elle rejoint
