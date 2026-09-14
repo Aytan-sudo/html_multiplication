@@ -2,10 +2,16 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 2.5.1** &mdash; jouable en ligne, telephone compris :
+**Version 2.5.2** &mdash; jouable en ligne, telephone compris :
 **https://aytan-sudo.github.io/html_multiplication/**
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
+
+## Version 2.5.2 — Passeport 1.1.0
+
+Module commun du passeport 1.1.0, qui raccorde SUTOM au thème Mots. Rien ne
+change dans le jeu ; le numéro de cache suit pour que les appareils reçoivent
+ce module.
 
 ## Version 2.5.1 — Passeport plus robuste
 
