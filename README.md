@@ -2,10 +2,24 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 2.1** &mdash; jouable en ligne, telephone compris :
+**Version 2.5.0** &mdash; jouable en ligne, telephone compris :
 **https://aytan-sudo.github.io/html_multiplication/**
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
+
+## Version 2.5.0 — Le passeport commun
+
+Lancer le jeu depuis le hub associe la configuration, les scores et les révisions
+ciblées au passeport de l’enfant. Dix calculs réellement essayés au cours d’une
+partie donnent le tampon Nombres, même avec des erreurs ; un délai expiré ne
+compte pas. Le bandeau affiche le prénom et permet de revenir au passeport.
+La configuration et les scores conservent ce profil entre les pages. Les
+anciens joueurs restent disponibles en mode invité. Le hub peut copier ces
+données et exporter les nouvelles données par profil. Les fichiers communs
+fonctionnent hors ligne, et les mises à jour préservent les caches des voisins.
+
+Pour utiliser le passeport sur l’écran d’accueil, privilégier l’installation
+du hub et ouvrir les jeux depuis celui-ci, dans le même espace de stockage.
 
 ## Le jeu
 

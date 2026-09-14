@@ -287,6 +287,14 @@ body {
     text-align: center;
 }
 
+/* Avec le passeport et un clavier en paysage, garder les quelques pixels
+   utiles à la question et au chrono plutôt que des marges verticales. */
+:root[data-compact="3"] #screen-game {
+    padding-block: 0;
+}
+
+.score-meta { white-space: pre-line; }
+
 .screen[hidden] {
     display: none;
 }

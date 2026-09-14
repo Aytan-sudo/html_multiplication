@@ -18,7 +18,7 @@ const UNSEEN_WEIGHT = 1.5;   // un fait jamais pose passe legerement devant
 const MASTERED_WEIGHT = 0.35; // 3 bonnes reponses d'affilee sans erreur
 
 function statsKey(playerName, operation) {
-    return `${STATS_PREFIX}${playerName}:${operation}`;
+    return `${STATS_PREFIX}${globalThis.Passeport?.profilId ? 'profil' : playerName}:${operation}`;
 }
 
 function loadStats(playerName, operation) {

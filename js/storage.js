@@ -11,6 +11,7 @@
 // migre au passage les donnees laissees par les anciennes versions.
 
 const GameStorage = (function () {
+    const profilStorage = globalThis.Passeport?.stockageJeu('multiplication');
     let hasLocalStorage = false;
     try {
         const probe = '__storage_probe__';
@@ -42,6 +43,7 @@ const GameStorage = (function () {
     }
 
     function get(key) {
+        if (profilStorage) return profilStorage.getItem(key);
         if (!hasLocalStorage) {
             return getCookie(key);
         }
@@ -66,6 +68,7 @@ const GameStorage = (function () {
     }
 
     function set(key, value) {
+        if (profilStorage) { try { profilStorage.setItem(key, value); return true; } catch { return false; } }
         if (!hasLocalStorage) {
             setCookie(key, value);
             return getCookie(key) !== null;
@@ -80,6 +83,7 @@ const GameStorage = (function () {
     }
 
     function remove(key) {
+        if (profilStorage) { try { profilStorage.removeItem(key); } catch { /* le ruban signale l’échec */ } return; }
         if (hasLocalStorage) {
             localStorage.removeItem(key);
         }

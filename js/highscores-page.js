@@ -24,9 +24,9 @@ function describe(score) {
     const tables = complete ? 'toutes les tables' : `tables ${score.selectedNumbers.join(', ')}`;
     // Le nombre d'erreurs n'existe pas dans les scores enregistres avant la v2.
     const mistakes = typeof score.mistakes === 'number'
-        ? ` &middot; ${score.mistakes} erreur${score.mistakes > 1 ? 's' : ''}`
+        ? ` · ${score.mistakes} erreur${score.mistakes > 1 ? 's' : ''}`
         : '';
-    return `${operation} &middot; ${difficulty} &middot; ${tables} &middot; ${score.timerDuration}s${mistakes}<br>${formatDate(score.date)}`;
+    return `${operation} · ${difficulty} · ${tables} · ${score.timerDuration}s${mistakes}\n${formatDate(score.date)}`;
 }
 
 function render() {
@@ -34,7 +34,9 @@ function render() {
     const operations = activeFilters('operation');
     const difficulties = activeFilters('difficulty');
 
-    const scores = GameStorage.getJSON('highscores', [])
+    const stored = GameStorage.getJSON('highscores', []);
+    const scores = (Array.isArray(stored) ? stored : [])
+        .filter(s => s && Array.isArray(s.selectedNumbers) && Number.isFinite(s.time))
         .filter(s => operations.includes(s.operation) && difficulties.includes(s.difficulty))
         .sort((a, b) => a.time - b.time);
 
@@ -52,13 +54,12 @@ function render() {
     scores.forEach((score, index) => {
         const item = document.createElement('div');
         item.className = 'score';
-        item.innerHTML = `
-            <div class="score-rank">${index + 1}</div>
-            <div class="score-player"></div>
-            <div class="score-time">${formatTime(score.time)}</div>
-            <div class="score-meta">${describe(score)}</div>`;
-        // Le nom vient du stockage local : on l'insere en texte, jamais en HTML.
-        item.querySelector('.score-player').textContent = score.players;
+        // Tous les champs peuvent provenir d'une sauvegarde importée : les
+        // descriptions, comme les noms, sont du texte et jamais du HTML.
+        for (const [name, value] of [['rank', index + 1], ['player', score.players], ['time', formatTime(score.time)], ['meta', describe(score)]]) {
+            const node = document.createElement('div'); node.className = 'score-' + name;
+            node.textContent = value; item.appendChild(node);
+        }
         fragment.appendChild(item);
     });
     container.replaceChildren(fragment);
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('back-button').addEventListener('click', () => {
-        window.location.href = 'index.html';
+        window.location.href = 'index.html' + (globalThis.Passeport ? '?profil=' + encodeURIComponent(globalThis.Passeport.profilId || '') : '');
     });
 
     document.getElementById('clear-button').addEventListener('click', () => {

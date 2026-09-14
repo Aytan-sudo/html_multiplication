@@ -6,7 +6,7 @@
 //
 // Elle doit rester alignee avec « version » dans package.json et avec CACHE
 // dans sw.js ; test-pages.js echoue si les trois divergent.
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 
 const DEFAULT_CONFIG = {
     operation: 'multiplication',   // 'addition' ou 'multiplication'
@@ -34,7 +34,7 @@ const PLAYERS = ['Emilie', 'Louane', 'Arthur', 'Flora', 'Papa', 'Maman'];
 const ANONYMOUS = 'Anonyme';
 
 function playerLabel(config) {
-    return config.playerName || ANONYMOUS;
+    return globalThis.Passeport?.profil()?.nom || config.playerName || ANONYMOUS;
 }
 
 const BG_COLORS = [
@@ -108,7 +108,7 @@ function saveConfig(config) {
 }
 
 function resetConfig() {
-    return { ...DEFAULT_CONFIG };
+    return { ...DEFAULT_CONFIG, playerName: globalThis.Passeport?.profilId ? 'profil' : '' };
 }
 
 function validateConfig(config) {
@@ -127,7 +127,7 @@ function validateConfig(config) {
         errors.push('Duree du timer invalide');
     }
     // Un nom vide est valide : c'est le mode anonyme.
-    if (config.playerName && !PLAYERS.includes(config.playerName)) {
+    if (config.playerName && !PLAYERS.includes(config.playerName) && !(globalThis.Passeport?.profilId && config.playerName === 'profil')) {
         errors.push('Joueur inconnu');
     }
 
@@ -146,4 +146,5 @@ function applyTheme(config) {
 }
 
 const gameConfig = loadConfig();
+if (globalThis.Passeport?.profilId) gameConfig.playerName = 'profil';
 applyTheme(gameConfig);

@@ -11,13 +11,17 @@ const SELECTABLE_TABLES = [2, 3, 4, 5, 6, 7, 8, 9];
 // defaut, et il doit rester possible d'y revenir.
 function buildPlayerOptions() {
     const container = document.getElementById('player-options');
-    const names = [{ value: '', label: ANONYMOUS }, ...PLAYERS.map(n => ({ value: n, label: n }))];
+    const profil = globalThis.Passeport?.profil();
+    const names = profil ? [{ value: 'profil', label: profil.nom }] : [{ value: '', label: ANONYMOUS }, ...PLAYERS.map(n => ({ value: n, label: n }))];
     container.replaceChildren(...names.map(({ value, label: text }) => {
         const label = document.createElement('label');
         // « Anonyme » prend la rangee entiere : au gabarit d'un prenom, le mot
         // debordait de sa pastille sur un petit ecran.
         label.className = value ? 'option option--name' : 'option option--name option--anon';
-        label.innerHTML = `<input type="radio" name="player" value="${value}"><span>${text}</span>`;
+        const input = document.createElement('input');
+        input.type = 'radio'; input.name = 'player'; input.value = value;
+        const span = document.createElement('span'); span.textContent = text;
+        label.append(input, span);
         return label;
     }));
 }
@@ -133,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('La sauvegarde a echoue. Verifie que le navigateur autorise le stockage local.');
             return;
         }
-        window.location.href = 'index.html';
+        window.location.href = 'index.html' + (globalThis.Passeport ? '?profil=' + encodeURIComponent(globalThis.Passeport.profilId || '') : '');
     });
 
     document.getElementById('reset-button').addEventListener('click', () => {

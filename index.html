@@ -17,12 +17,14 @@
     <link rel="icon" href="assets/img/icon-192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="assets/img/icon-192.png">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="commun/passeport.css">
     <!-- Sans defer : la hauteur reelle doit etre connue avant le premier
          rendu, sinon le jeu s'affiche brievement a la mauvaise taille. -->
     <script src="js/viewport.js"></script>
 </head>
 <body>
     <main class="app">
+        <div class="passeport-ruban" data-passeport-ruban data-jeu="html_multiplication"></div>
         <header class="topbar">
             <button id="sound-toggle" class="icon-btn" type="button" title="Couper ou remettre le son" aria-pressed="false">
                 <img src="assets/img/unmute.webp" alt="Son active" width="40" height="40">
@@ -114,6 +116,8 @@
         </div>
     </div>
 
+    <script src="commun/passeport.js"></script>
+    <script src="commun/liaison.js" defer></script>
     <script src="js/storage.js"></script>
     <script src="js/config.js"></script>
     <script src="js/questions.js"></script>

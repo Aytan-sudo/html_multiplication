@@ -15,6 +15,8 @@ const state = {
     remainingOnPause: 0,
     tickHandle: null,
     startedAt: 0,
+    passportDay: '',
+    answeredCount: 0,
     correctCount: 0,
     mistakeCount: 0
 };
@@ -218,6 +220,13 @@ function onSubmit(event) {
         return;
     }
 
+    // Seules les réponses réellement saisies comptent, jamais les expirations.
+    if (/^\d+$/.test(raw)) {
+        const day = globalThis.Passeport?.jourLocal();
+        if (state.passportDay !== day) { state.passportDay = day; state.answeredCount = 0; }
+        state.answeredCount++;
+        globalThis.Passeport?.noter('html_multiplication', state.answeredCount);
+    }
     const isCorrect = Number(raw) === expectedResult(state.fact, gameConfig.operation);
     state.picker.record(state.fact, isCorrect);
 
@@ -245,6 +254,8 @@ function startGame() {
     loadSounds();
     state.phase = 'playing';
     state.diamonds = 0;
+    state.answeredCount = 0;
+    state.passportDay = globalThis.Passeport?.jourLocal();
     state.correctCount = 0;
     state.mistakeCount = 0;
     state.startedAt = Date.now();
@@ -368,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sans prenom choisi, le bouton ne s'adresse a personne en particulier :
     // c'est le cas par defaut, la tablette passant de main en main.
     el.startBtn.textContent = gameConfig.playerName
-        ? `C'est parti, ${gameConfig.playerName} !`
+        ? `C'est parti, ${playerLabel(gameConfig)} !`
         : "C'est parti !";
     el.modeSummary.textContent = describeMode();
     applyMute();
