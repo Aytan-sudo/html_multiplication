@@ -2,10 +2,15 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 2.5.2** &mdash; jouable en ligne, telephone compris :
+**Version 2.6.0** &mdash; jouable en ligne, telephone compris :
 **https://aytan-sudo.github.io/html_multiplication/**
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
+
+## Version 2.6.0 — Une victoire, un tampon
+
+Une partie gagnée donne le tampon Nombres, au même titre que dix calculs
+essayés. Passeport commun 1.2.0.
 
 ## Version 2.5.2 — Passeport 1.1.0
 

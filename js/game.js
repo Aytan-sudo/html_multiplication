@@ -310,6 +310,8 @@ function saveVictory(totalSeconds) {
 
 function onVictory() {
     state.phase = 'victory';
+    // Une partie gagnée donne le tampon Nombres, comme dix réponses essayées.
+    globalThis.Passeport?.noter('html_multiplication', state.answeredCount, true);
     const totalSeconds = Math.floor((Date.now() - state.startedAt) / 1000);
     const { rank } = saveVictory(totalSeconds);
 
