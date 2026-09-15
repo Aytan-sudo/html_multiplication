@@ -6,7 +6,7 @@
 //
 // Elle doit rester alignee avec « version » dans package.json et avec CACHE
 // dans sw.js ; test-pages.js echoue si les trois divergent.
-const APP_VERSION = '2.6.2';
+const APP_VERSION = '2.6.3';
 
 const DEFAULT_CONFIG = {
     operation: 'multiplication',   // 'addition' ou 'multiplication'
