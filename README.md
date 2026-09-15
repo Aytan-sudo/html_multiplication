@@ -2,10 +2,15 @@
 
 Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
-**Version 2.6.1** &mdash; jouable en ligne, telephone compris :
+**Version 2.6.2** &mdash; jouable en ligne, telephone compris :
 **https://aytan-sudo.github.io/html_multiplication/**
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
+
+## Version 2.6.2 — Passeport 1.4.0
+
+Module commun du passeport 1.4.0, qui raccorde Démineur et Slitherlink au thème
+Logique. Rien ne change dans le jeu ; le numéro de cache suit.
 
 ## Version 2.6.1 — Passeport 1.3.0
 
