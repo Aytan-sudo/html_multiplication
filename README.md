@@ -7,6 +7,22 @@ Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
 
+## Version 2.6.5
+
+Trois manques releves en verifiant le jeu dans le simulateur iOS de Xcode.
+
+- **Le viewport interdit le zoom tactile** (`user-scalable=no`), sur les trois
+  pages.
+- **`interactive-widget=resizes-content` passe dans `js/viewport.js`**, et n'est
+  ajoute que hors WebKit. La cle sert a Android ; Safari ne la connait pas et
+  ecrivait un avertissement dans la console a chaque chargement. Android garde
+  son comportement, la console iOS est propre.
+- **Les cibles tactiles restent a 44 px au niveau compact 1.** Un iPhone SE ne
+  laisse que 549 px de haut dans Safari d'iOS 26 : le jeu y tombait en
+  permanence a ce niveau, ou les boutons passaient a 40 px. Les niveaux
+  suivants, qui ne durent que le temps d'une saisie au clavier, sont
+  inchanges.
+
 ## Version 2.6.4 — Passeport 1.6.0
 
 Module commun du passeport 1.6.0 : Polyominos et Mosaïcomino rejoignent le thème
@@ -107,13 +123,20 @@ tailles au lieu de laisser quoi que ce soit deborder :
 | Hauteur disponible | Ce qui change |
 |---|---|
 | plus de 640 px | tailles pleines |
-| 520 a 640 px | police et cibles reduites |
+| 520 a 640 px | police et icones reduites, cibles tactiles tenues a 44 px |
 | 300 a 520 px | mode serre, la ligne de progression disparait |
 | moins de 300 px | la rangee de diamants est masquee au profit de la question |
 
 Le cas le plus dur, telephone couche avec le clavier ouvert, ne laisse que
-190 px : tout y tient encore. Sur Android, `interactive-widget=resizes-content`
-fait deja retrecir la fenetre, et la mesure prend le relais partout ailleurs.
+190 px : tout y tient encore. Le niveau 1 est le cas ordinaire du petit
+telephone — un iPhone SE offre 549 px dans Safari d'iOS 26, clavier ferme — et
+garde donc ses cibles a 44 px ; les niveaux 2 et 3 ne durent que le temps d'une
+saisie.
+
+Sur Android, `interactive-widget=resizes-content` fait deja retrecir la
+fenetre ; la cle est ajoutee par `js/viewport.js`, hors WebKit seulement, parce
+que Safari ne la connait pas et l'ecrit en avertissement dans la console. La
+mesure prend le relais partout ailleurs.
 
 ### Entrainement cible
 
