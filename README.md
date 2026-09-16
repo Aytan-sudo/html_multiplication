@@ -7,6 +7,12 @@ Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
 
+## Version 2.6.6 — Passeport 1.7.0
+
+Module commun du passeport 1.7.0 : 2048 rejoint le thème Nombres, Snake ouvre le
+thème Aventure, Motamorphose le thème Mots, et Dames, Diamants, Laser & Miroirs
+et Untangle rejoignent le thème Logique. Rien ne change dans le jeu.
+
 ## Version 2.6.5
 
 Trois manques releves en verifiant le jeu dans le simulateur iOS de Xcode.
