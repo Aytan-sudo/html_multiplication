@@ -2,10 +2,12 @@
 <html lang="fr" class="page-game">
 <head>
     <meta charset="UTF-8">
-    <!-- interactive-widget=resizes-content : sur Android, le clavier retrecit
-         alors la zone de mise en page au lieu de recouvrir le contenu. iOS
-         l'ignore, c'est js/viewport.js qui prend le relais. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+    <!-- interactive-widget=resizes-content sert a Android : le clavier y
+         retrecit la zone de mise en page au lieu de recouvrir le contenu.
+         Safari ne connait pas la cle et l'ecrit en avertissement dans la
+         console, donc js/viewport.js ne l'ajoute que hors WebKit ; sur iOS,
+         c'est deja lui qui prend le relais. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="theme-color" content="#f8c3d3">
     <meta name="description" content="Jeu educatif pour reviser les tables de multiplication et d'addition.">
     <meta name="mobile-web-app-capable" content="yes">

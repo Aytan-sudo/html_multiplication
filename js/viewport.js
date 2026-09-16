@@ -18,6 +18,16 @@
     const root = document.documentElement;
     const vv = window.visualViewport;
 
+    // La cle interactive-widget n'existe que hors WebKit : ecrite dans la
+    // balise, Safari la refuse bruyamment dans la console. On l'ajoute donc
+    // ici, la ou elle sert (Android), avant le premier rendu.
+    if (!/Apple/.test(navigator.vendor || '')) {
+        const balise = document.querySelector('meta[name="viewport"]');
+        if (balise && !balise.content.includes('interactive-widget')) {
+            balise.content += ', interactive-widget=resizes-content';
+        }
+    }
+
     // Seuils de hauteur disponible, en pixels CSS.
     //   0 = confortable (telephone debout, clavier ferme)
     //   1 = reduit      (petit ecran, ou paysage clavier ferme)
