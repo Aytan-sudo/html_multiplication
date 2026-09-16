@@ -7,6 +7,12 @@ Un jeu educatif pour reviser les tables de multiplication et d'addition.
 
 Developpe pour mes enfants (Emilie, Louane, Arthur et Flora).
 
+## Version 2.6.7 — Passeport 1.8.0
+
+Module commun du passeport 1.8.0 : **Maze for Adventurers** rejoint le thème
+Aventure, aux côtés de Snake. Toute la collection est désormais raccordée. Rien
+ne change dans le jeu.
+
 ## Version 2.6.6 — Passeport 1.7.0
 
 Module commun du passeport 1.7.0 : 2048 rejoint le thème Nombres, Snake ouvre le
